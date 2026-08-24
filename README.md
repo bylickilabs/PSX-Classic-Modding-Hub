@@ -1,2 +1,6 @@
-# PSX-Classic-Modding-Hub
-Modding, controller configurations, RetroArch and BleemSync customizations, themes, graphics, and technical documentation for the PlayStation Classic.
+# PSX Classic Modding Hub
+
+> 🚧 COMING SOON
+>
+> This repository is currently under development.  
+> Controller configurations, BleemSync and RetroArch customizations, modding resources, and technical documentation will be published here soon.
