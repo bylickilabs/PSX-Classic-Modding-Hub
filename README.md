@@ -1,4 +1,4 @@
-# PSX Classic Controller Configs
+# PSX Classic Controller Configs [![PSX Classic Issue Guardian](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/issue-guardian.yml/badge.svg)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/issue-guardian.yml)
 
 | [![Controller / Device Report](https://img.shields.io/badge/Issue-Controller%20%2F%20Device%20Report-blue?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=retroarch-controller-report.yml) |[![Bug Report](https://img.shields.io/badge/Issue-Bug%20Report-red?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=bug-report.yml) |[![Feature Request](https://img.shields.io/badge/Issue-Feature%20Request-brightgreen?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=feature-request.yml) |
 |---|---|---|
