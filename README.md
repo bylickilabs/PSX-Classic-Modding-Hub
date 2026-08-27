@@ -1,11 +1,13 @@
 <div align="center">
 
-# PSX Classic Controller Configs
+# 🎮 PSX Classic Controller Configs
+
+<img src="https://img.shields.io/badge/PSX_CLASSIC-MODDING_HUB-003791?style=for-the-badge&logo=playstation&logoColor=white" alt="PSX Classic Modding Hub">
+
+<br><br>
 
 <a href="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/config-validator.yml"><img src="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/config-validator.yml/badge.svg" alt="PSX Classic Config Validator"></a>
 <a href="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/issue-guardian.yml"><img src="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/issue-guardian.yml/badge.svg" alt="PSX Classic Issue Guardian"></a>
-
-
 
 | [![Controller / Device Report](https://img.shields.io/badge/Issue-Controller%20%2F%20Device%20Report-blue?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=retroarch-controller-report.yml) |[![Bug Report](https://img.shields.io/badge/Issue-Bug%20Report-red?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=bug-report.yml) |[![Feature Request](https://img.shields.io/badge/Issue-Feature%20Request-brightgreen?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=feature-request.yml) |
 |---|---|---|
