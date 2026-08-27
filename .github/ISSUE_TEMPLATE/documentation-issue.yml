@@ -1,0 +1,161 @@
+name: Documentation Issue
+description: Melde fehlende, fehlerhafte, veraltete oder unklare README-Inhalte, Installationsanleitungen oder technische Dokumentation.
+title: "[Documentation] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 📚 Documentation Issue
+
+        Vielen Dank für deinen Hinweis zur Dokumentation des PSX Classic Modding Hub.
+
+        **Alle nachfolgenden Angaben sind verpflichtend.** Ziel ist eine präzise, nachvollziehbare und technisch belastbare Verbesserung der bestehenden Dokumentation.
+
+        Falls eine Information nicht bekannt ist, trage ausdrücklich `Nicht bekannt` ein. Falls ein Punkt nicht zutrifft, trage `Nicht zutreffend` ein. Pflichtfelder dürfen nicht leer bleiben.
+
+  - type: dropdown
+    id: documentation_type
+    attributes:
+      label: Art des Dokumentationsproblems
+      description: Wähle aus, welcher Bereich betroffen ist.
+      options:
+        - Fehlender Inhalt
+        - Fehlerhafter Inhalt
+        - Veralteter Inhalt
+        - Unklare oder missverständliche Formulierung
+        - Fehlerhafte Installationsanleitung
+        - Unvollständige Installationsanleitung
+        - Fehlerhafte technische Dokumentation
+        - Unvollständige technische Dokumentation
+        - Falscher Link oder Verweis
+        - Struktur- oder Navigationsproblem
+        - Sonstiges Dokumentationsproblem
+    validations:
+      required: true
+
+  - type: input
+    id: affected_document
+    attributes:
+      label: Betroffene Datei oder Dokumentation
+      description: Trage den Namen oder Pfad der betroffenen Datei, Anleitung oder Dokumentation ein.
+      placeholder: z. B. README.md, docs/installation.md oder Installationsabschnitt
+    validations:
+      required: true
+
+  - type: input
+    id: affected_section
+    attributes:
+      label: Betroffener Abschnitt
+      description: Nenne die genaue Überschrift, Sektion oder Position innerhalb der Dokumentation.
+      placeholder: z. B. Installation, RetroArch Setup, Controller Configuration
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_content
+    attributes:
+      label: Aktueller Inhalt oder aktueller Zustand
+      description: Beschreibe oder zitiere den derzeitigen problematischen Inhalt so präzise wie möglich.
+      placeholder: Welcher Inhalt ist aktuell vorhanden oder was fehlt an dieser Stelle?
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: Beschreibung des Problems
+      description: Erläutere eindeutig, warum der aktuelle Inhalt falsch, unklar, veraltet oder unvollständig ist.
+      placeholder: Was genau ist problematisch und welche Auswirkungen hat dies für Nutzer?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_content
+    attributes:
+      label: Erwarteter oder korrekter Inhalt
+      description: Beschreibe, wie die Dokumentation stattdessen aussehen oder welche Information ergänzt werden sollte.
+      placeholder: Welche Information oder Formulierung wäre korrekt und vollständig?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction_or_context
+    attributes:
+      label: Kontext oder Schritte zur Überprüfung
+      description: Beschreibe, wie sich das Dokumentationsproblem nachvollziehen oder überprüfen lässt.
+      placeholder: |
+        1. Öffne ...
+        2. Navigiere zu ...
+        3. Folge der Anleitung ...
+        4. Problem wird sichtbar
+    validations:
+      required: true
+
+  - type: input
+    id: retroarch_version
+    attributes:
+      label: Betroffene RetroArch-Version
+      description: Falls die Dokumentation versionsabhängig ist, trage die betroffene RetroArch-Version ein. Andernfalls `Nicht zutreffend`.
+      placeholder: z. B. 1.20.0 oder Nicht zutreffend
+    validations:
+      required: true
+
+  - type: input
+    id: core_name
+    attributes:
+      label: Betroffener Core
+      description: Falls sich der Hinweis auf einen bestimmten Core bezieht, trage ihn ein. Andernfalls `Nicht zutreffend`.
+      placeholder: z. B. PCSX-ReARMed oder Nicht zutreffend
+    validations:
+      required: true
+
+  - type: input
+    id: psx_setup
+    attributes:
+      label: Betroffenes PSX-Classic-Setup
+      description: Trage das verwendete Setup, Modding-System oder die betroffene Umgebung ein. Falls nicht relevant, `Nicht zutreffend`.
+      placeholder: z. B. AutoBleem, Project Eris, RetroBoot oder Nicht zutreffend
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical_evidence
+    attributes:
+      label: Technische Nachweise oder Referenzen
+      description: Füge relevante Logs, Screenshots, Vergleichswerte, offizielle Dokumentation oder andere technische Nachweise ein. Falls keine vorhanden sind, `Keine vorhanden`.
+      placeholder: Links, Screenshots, Logs, Referenzen oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_change
+    attributes:
+      label: Konkreter Änderungsvorschlag
+      description: Formuliere möglichst konkret, welche Passage ergänzt, ersetzt, entfernt oder neu strukturiert werden sollte.
+      placeholder: Beschreibe die gewünschte Änderung möglichst präzise.
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected_users
+    attributes:
+      label: Betroffene Nutzer oder Anwendungsfälle
+      description: Beschreibe, welche Nutzergruppen oder Workflows durch das Dokumentationsproblem betroffen sind.
+      placeholder: z. B. Neueinsteiger, Controller-Konfiguration, Core-Einrichtung, BIOS-Setup
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      options:
+        - label: Ich habe geprüft, ob das Problem bereits in einem bestehenden Issue gemeldet wurde.
+          required: true
+        - label: Ich habe die betroffene Dokumentation selbst geprüft.
+          required: true
+        - label: Meine Angaben sind vollständig und technisch nachvollziehbar.
+          required: true
+        - label: Alle Pflichtfelder wurden ausgefüllt und nicht zutreffende Punkte entsprechend gekennzeichnet.
+          required: true
