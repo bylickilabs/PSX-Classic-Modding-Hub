@@ -1,0 +1,281 @@
+name: Hardware / USB Device Report
+description: Dokumentiere USB-Hubs, Adapter, Controller-Adapter, Tastaturen, Speichergeräte und sonstige Hardware am PlayStation Classic.
+title: "[Hardware/USB] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🔌 Hardware / USB Device Report
+
+        Vielen Dank für deinen Hardware-Bericht für den PSX Classic Modding Hub.
+
+        **Alle nachfolgenden Angaben sind verpflichtend.** Ziel ist eine reproduzierbare Dokumentation der tatsächlichen Kompatibilität von USB-Hubs, Adaptern, Controller-Adaptern, Tastaturen, Speichergeräten und sonstiger Hardware am PlayStation Classic.
+
+        Falls eine Information nicht bekannt ist, trage ausdrücklich `Nicht bekannt` ein. Falls ein Punkt nicht zutrifft, trage `Nicht zutreffend` ein. Falls keine Abweichungen bekannt sind, trage `Keine bekannt` ein. Pflichtfelder dürfen nicht leer bleiben.
+
+  - type: dropdown
+    id: device_category
+    attributes:
+      label: Gerätetyp
+      description: Wähle die Kategorie der getesteten Hardware.
+      options:
+        - USB-Hub
+        - USB-Adapter
+        - Controller-Adapter
+        - Controller
+        - Tastatur
+        - Maus
+        - USB-Stick
+        - Externe SSD
+        - Externe HDD
+        - Kartenleser
+        - Netzwerkadapter
+        - Bluetooth-Adapter
+        - WLAN-Adapter
+        - Stromversorgungs- oder OTG-Zubehör
+        - Sonstige Hardware
+    validations:
+      required: true
+
+  - type: dropdown
+    id: compatibility_status
+    attributes:
+      label: Kompatibilitätsstatus
+      description: Wähle das Gesamtergebnis des Hardwaretests.
+      options:
+        - Vollständig kompatibel
+        - Kompatibel mit kleineren Einschränkungen
+        - Eingeschränkt kompatibel
+        - Nur mit zusätzlicher Konfiguration funktionsfähig
+        - Instabil
+        - Nicht kompatibel
+        - Wird nicht erkannt
+    validations:
+      required: true
+
+  - type: input
+    id: manufacturer
+    attributes:
+      label: Hersteller
+      description: Gib den Hersteller der Hardware exakt an.
+      placeholder: z. B. Anker, SanDisk, 8BitDo
+    validations:
+      required: true
+
+  - type: input
+    id: model
+    attributes:
+      label: Modellbezeichnung
+      description: Gib die vollständige Modell- oder Produktbezeichnung an.
+      placeholder: Modell / Produktname
+    validations:
+      required: true
+
+  - type: input
+    id: hardware_revision
+    attributes:
+      label: Hardware-Revision / Version
+      description: Gib die Revision, Modellgeneration oder Hardware-Version an. Falls unbekannt, trage `Nicht bekannt` ein.
+      placeholder: z. B. Rev. 2 oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: vendor_id_decimal
+    attributes:
+      label: Vendor-ID (VID) in Dezimalform
+      description: Gib die Vendor-ID in Dezimalform an. Falls nicht verfügbar, trage `Nicht bekannt` ein.
+      placeholder: z. B. 1356 oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: product_id_decimal
+    attributes:
+      label: Product-ID (PID) in Dezimalform
+      description: Gib die Product-ID in Dezimalform an. Falls nicht verfügbar, trage `Nicht bekannt` ein.
+      placeholder: z. B. 1476 oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: vid_pid_hex
+    attributes:
+      label: VID:PID in Hexadezimalform
+      description: Gib VID:PID in Hexadezimalform an. Falls nicht bekannt, trage `Nicht bekannt` ein.
+      placeholder: z. B. 054C:05C4 oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: connection_type
+    attributes:
+      label: Anschlussart
+      description: Beschreibe, wie das Gerät mit dem PlayStation Classic verbunden wurde.
+      placeholder: z. B. Front-USB-Port 1, OTG am Micro-USB-Port, aktiver USB-Hub
+    validations:
+      required: true
+
+  - type: textarea
+    id: connection_chain
+    attributes:
+      label: Vollständiger Anschlussweg
+      description: Dokumentiere die komplette Verbindungskette vom PlayStation Classic bis zur getesteten Hardware.
+      placeholder: |
+        PlayStation Classic -> OTG-Adapter -> aktiver USB-Hub -> getestetes Gerät
+    validations:
+      required: true
+
+  - type: dropdown
+    id: power_supply
+    attributes:
+      label: Stromversorgung der Hardware
+      description: Wähle die verwendete Stromversorgung.
+      options:
+        - Ausschließlich über den PlayStation Classic
+        - Externes Netzteil
+        - Aktiver USB-Hub mit eigener Stromversorgung
+        - OTG mit externer Stromversorgung
+        - Andere Stromversorgung
+        - Nicht zutreffend
+        - Nicht bekannt
+    validations:
+      required: true
+
+  - type: textarea
+    id: power_details
+    attributes:
+      label: Details zur Stromversorgung
+      description: Dokumentiere Netzteil, Spannung, Stromstärke oder Besonderheiten. Falls nicht zutreffend, trage `Nicht zutreffend` ein.
+      placeholder: z. B. 5 V / 2 A, aktiver Hub mit separatem Netzteil
+    validations:
+      required: true
+
+  - type: input
+    id: psx_setup
+    attributes:
+      label: PSX-Classic-Setup
+      description: Gib die verwendete Modding- oder Softwareumgebung an.
+      placeholder: z. B. Project Eris, AutoBleem, BleemSync, RetroBoot
+    validations:
+      required: true
+
+  - type: input
+    id: psx_setup_version
+    attributes:
+      label: Version des PSX-Classic-Setups
+      description: Gib die exakt verwendete Version an. Falls unbekannt, trage `Nicht bekannt` ein.
+      placeholder: Version / Build
+    validations:
+      required: true
+
+  - type: input
+    id: retroarch_version
+    attributes:
+      label: RetroArch-Version
+      description: Gib die getestete RetroArch-Version an. Falls RetroArch nicht beteiligt war, trage `Nicht zutreffend` ein.
+      placeholder: z. B. 1.20.0 oder Nicht zutreffend
+    validations:
+      required: true
+
+  - type: input
+    id: input_driver
+    attributes:
+      label: Verwendeter RetroArch-Eingabetreiber
+      description: Gib den verwendeten Eingabetreiber an. Falls nicht relevant, trage `Nicht zutreffend` ein.
+      placeholder: z. B. udev, sdl2 oder Nicht zutreffend
+    validations:
+      required: true
+
+  - type: textarea
+    id: storage_details
+    attributes:
+      label: Speichergerät-Details
+      description: Bei Speichergeräten Dateisystem, Kapazität, Partitionsschema und relevante Eigenschaften angeben. Bei anderer Hardware `Nicht zutreffend` eintragen.
+      placeholder: z. B. 128 GB, exFAT, MBR, USB 3.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: test_scenario
+    attributes:
+      label: Konkretes Testszenario
+      description: Beschreibe genau, wie die Hardware getestet wurde.
+      placeholder: |
+        1. Gerät angeschlossen
+        2. PlayStation Classic gestartet
+        3. Erkennung geprüft
+        4. Funktion in RetroArch / Frontend getestet
+        5. Langzeittest durchgeführt
+    validations:
+      required: true
+
+  - type: input
+    id: test_duration
+    attributes:
+      label: Testdauer
+      description: Gib an, wie lange die Hardware im beschriebenen Setup getestet wurde.
+      placeholder: z. B. 45 Minuten, 3 Stunden, mehrere Starts
+    validations:
+      required: true
+
+  - type: textarea
+    id: observed_behavior
+    attributes:
+      label: Beobachtetes Verhalten
+      description: Beschreibe Erkennung, Stabilität, Geschwindigkeit, Eingabeverhalten und sonstige relevante Beobachtungen.
+      placeholder: Wie verhält sich die Hardware im Betrieb?
+    validations:
+      required: true
+
+  - type: textarea
+    id: limitations
+    attributes:
+      label: Bekannte Einschränkungen oder Abweichungen
+      description: Dokumentiere sämtliche bekannten Einschränkungen, Aussetzer, Inkompatibilitäten oder Besonderheiten. Falls keine bekannt sind, trage `Keine bekannt` ein.
+      placeholder: Keine bekannt
+    validations:
+      required: true
+
+  - type: textarea
+    id: required_configuration
+    attributes:
+      label: Erforderliche Konfiguration / Workarounds
+      description: Dokumentiere alle nötigen Einstellungen, Treiber, Adapter, Stromversorgungsmaßnahmen oder Workarounds. Falls keine erforderlich sind, trage `Keine erforderlich` ein.
+      placeholder: Keine erforderlich
+    validations:
+      required: true
+
+  - type: textarea
+    id: revision_differences
+    attributes:
+      label: Bekannte Unterschiede zwischen Hardware-Revisionen
+      description: Dokumentiere bekannte Unterschiede anderer Revisionen oder Modellvarianten. Falls keine bekannt sind, trage `Keine bekannt` ein.
+      placeholder: Keine bekannt
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs, Screenshots oder weitere Nachweise
+      description: Füge relevante Logs, Screenshots, Fotos, Systemmeldungen oder technische Nachweise hinzu. Falls keine vorhanden sind, trage `Keine vorhanden` ein.
+      placeholder: Nachweise hier einfügen oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      description: Bestätige die Qualität und Herkunft der Angaben.
+      options:
+        - label: Ich habe die angegebene Hardware selbst am PlayStation Classic getestet.
+          required: true
+        - label: Die Hersteller-, Modell-, Versions- und Verbindungsangaben wurden vollständig dokumentiert.
+          required: true
+        - label: Bekannte Einschränkungen, Workarounds und Hardware-Revisionen wurden angegeben.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig und nach bestem Wissen ausgefüllt.
+          required: true
