@@ -1,0 +1,288 @@
+name: Core / Configuration Report
+description: Dokumentiere funktionierende oder problematische Core-Konfigurationen, BIOS-Einstellungen sowie Video-, Audio- und Input-Parameter.
+title: "[Core/Config] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # ⚙️ Core / Configuration Report
+
+        Vielen Dank für deinen Konfigurationsbericht für den PSX Classic Modding Hub.
+
+        **Alle nachfolgenden Angaben sind verpflichtend.** Ziel ist eine technisch nachvollziehbare und reproduzierbare Dokumentation von funktionierenden oder problematischen Core-Konfigurationen.
+
+        Falls eine Information nicht bekannt ist, trage ausdrücklich `Nicht bekannt` ein. Falls ein Punkt nicht zutrifft, trage `Nicht zutreffend` ein. Pflichtfelder dürfen nicht leer bleiben.
+
+  - type: dropdown
+    id: configuration_status
+    attributes:
+      label: Status der Konfiguration
+      description: Wähle aus, wie sich die getestete Konfiguration verhält.
+      options:
+        - Funktioniert vollständig
+        - Funktioniert mit kleineren Einschränkungen
+        - Funktioniert nur teilweise
+        - Problematisch / instabil
+        - Nicht funktionsfähig
+        - Führt zu Absturz oder Startfehler
+    validations:
+      required: true
+
+  - type: input
+    id: retroarch_version
+    attributes:
+      label: RetroArch-Version
+      description: Trage die exakt verwendete RetroArch-Version ein.
+      placeholder: z. B. 1.20.0
+    validations:
+      required: true
+
+  - type: input
+    id: core_name
+    attributes:
+      label: Core
+      description: Trage den exakten Namen des verwendeten Cores ein.
+      placeholder: z. B. PCSX-ReARMed
+    validations:
+      required: true
+
+  - type: input
+    id: core_version
+    attributes:
+      label: Core-Version / Build
+      description: Gib die verwendete Core-Version oder den Build an.
+      placeholder: z. B. Git-Build, Commit, Versionsnummer oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: psx_classic_setup
+    attributes:
+      label: PSX-Classic-Setup
+      description: Gib die verwendete Modding-Umgebung oder Distribution an.
+      placeholder: z. B. Project Eris, BleemSync, AutoBleem oder eigenes Setup
+    validations:
+      required: true
+
+  - type: input
+    id: setup_version
+    attributes:
+      label: Version des PSX-Classic-Setups
+      description: Trage die verwendete Version oder den Build des Setups ein.
+      placeholder: Version oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: tested_game
+    attributes:
+      label: Getestetes Spiel
+      description: Nenne mindestens ein konkretes Spiel, mit dem die Konfiguration getestet wurde.
+      placeholder: z. B. Tekken 3
+    validations:
+      required: true
+
+  - type: input
+    id: game_region
+    attributes:
+      label: Region / Version des Spiels
+      description: Gib Region, Release oder Revision des getesteten Spiels an.
+      placeholder: z. B. PAL, NTSC-U, NTSC-J, Rev 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: bios_configuration
+    attributes:
+      label: BIOS-Konfiguration
+      description: Dokumentiere verwendetes BIOS, Dateiname, Region und relevante BIOS-bezogene Einstellungen.
+      placeholder: |
+        BIOS-Datei: ...
+        Region: ...
+        Prüfsumme, sofern bekannt: ...
+        BIOS-Modus / Einstellung: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: core_options
+    attributes:
+      label: Core-Optionen
+      description: Dokumentiere alle vom Standard abweichenden Core-Optionen. Falls keine geändert wurden, trage `Standardwerte` ein.
+      placeholder: |
+        Option 1 = ...
+        Option 2 = ...
+        Option 3 = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: video_settings
+    attributes:
+      label: Video-Parameter
+      description: Dokumentiere die relevanten Videoeinstellungen vollständig.
+      placeholder: |
+        Video Driver = ...
+        Auflösung = ...
+        Seitenverhältnis = ...
+        VSync = ...
+        Integer Scale = ...
+        Bilinear Filtering = ...
+        Shader = ...
+        Threaded Video = ...
+        Weitere Video-Parameter = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: audio_settings
+    attributes:
+      label: Audio-Parameter
+      description: Dokumentiere die relevanten Audioeinstellungen vollständig.
+      placeholder: |
+        Audio Driver = ...
+        Audio Latency = ...
+        Resampler = ...
+        Synchronisation = ...
+        Lautstärke / Gain = ...
+        Weitere Audio-Parameter = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: input_settings
+    attributes:
+      label: Input-Parameter
+      description: Dokumentiere Eingabetreiber, Controller, Port-Zuordnung und relevante Input-Einstellungen.
+      placeholder: |
+        Input Driver = ...
+        Controller = ...
+        VID:PID = ...
+        Port = ...
+        Device Type = ...
+        Analog Mode = ...
+        Deadzone = ...
+        Weitere Input-Parameter = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: controller_mapping
+    attributes:
+      label: Controller- und Tastenbelegung
+      description: Dokumentiere die für diesen Test verwendete Belegung oder verweise auf eine eindeutig identifizierbare Konfiguration im Repository.
+      placeholder: |
+        D-Pad = ...
+        Cross / A = ...
+        Circle / B = ...
+        Square / X = ...
+        Triangle / Y = ...
+        L1 / R1 = ...
+        L2 / R2 = ...
+        Start / Select = ...
+        Analogsticks = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: retroarch_overrides
+    attributes:
+      label: RetroArch Overrides / zusätzliche Konfiguration
+      description: Dokumentiere verwendete Core-, Content-Directory- oder Game-Overrides sowie sonstige abweichende RetroArch-Einstellungen.
+      placeholder: |
+        Core Override = ...
+        Content Directory Override = ...
+        Game Override = ...
+        Weitere Konfiguration = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: storage_and_hardware
+    attributes:
+      label: Speicher- und Hardware-Setup
+      description: Dokumentiere relevante Hardware, USB-Hubs, Speichermedien, Adapter oder sonstige Komponenten.
+      placeholder: |
+        Speichermedium = ...
+        Dateisystem = ...
+        USB-Hub = ...
+        Adapter = ...
+        Weitere Hardware = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: test_procedure
+    attributes:
+      label: Testablauf
+      description: Beschreibe, wie die Konfiguration getestet wurde.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+        4. Ergebnis ...
+    validations:
+      required: true
+
+  - type: input
+    id: test_duration
+    attributes:
+      label: Testdauer
+      description: Gib an, wie lange die Konfiguration getestet wurde.
+      placeholder: z. B. 45 Minuten
+    validations:
+      required: true
+
+  - type: textarea
+    id: observed_behavior
+    attributes:
+      label: Beobachtetes Verhalten
+      description: Beschreibe das tatsächliche Verhalten während des Tests.
+      placeholder: Performance, Bild, Ton, Eingabe, Stabilität, Ladeverhalten und sonstige Beobachtungen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: known_issues
+    attributes:
+      label: Bekannte Probleme / Abweichungen
+      description: Dokumentiere alle beobachteten Probleme, Fehler oder Abweichungen. Falls keine bestehen, trage `Keine bekannt` ein.
+      placeholder: Keine bekannt oder genaue Problembeschreibung
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Workaround / notwendige Anpassungen
+      description: Beschreibe erforderliche Änderungen, damit die Konfiguration funktioniert. Falls keine notwendig sind, trage `Keine erforderlich` ein.
+      placeholder: Keine erforderlich oder genaue Beschreibung
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs_evidence
+    attributes:
+      label: Logs / Screenshots / zusätzliche Nachweise
+      description: Füge relevante Logs, Fehlermeldungen, Screenshots oder andere technische Nachweise ein. Falls keine vorhanden sind, trage `Keine vorhanden` ein.
+      placeholder: Logs, Fehlermeldungen, Screenshots, Links oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      description: Bestätige die Qualität und Reproduzierbarkeit der Angaben.
+      options:
+        - label: Ich habe diese Konfiguration selbst auf der angegebenen PSX-Classic-Umgebung getestet.
+          required: true
+        - label: Ich habe alle vom Standard abweichenden Einstellungen dokumentiert.
+          required: true
+        - label: BIOS-, Video-, Audio- und Input-Parameter wurden vollständig angegeben.
+          required: true
+        - label: Die Angaben entsprechen dem tatsächlich getesteten Setup.
+          required: true
+        - label: Kein Pflichtfeld wurde absichtlich ausgelassen.
+          required: true
