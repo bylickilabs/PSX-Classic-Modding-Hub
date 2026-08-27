@@ -1,0 +1,219 @@
+name: Bug Report
+description: Melde einen reproduzierbaren Fehler im PSX Classic Modding Hub oder einer dokumentierten Konfiguration.
+title: "[Bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🐞 Bug Report
+
+        Vielen Dank für deine Fehlermeldung.
+
+        **Alle nachfolgenden Angaben sind verpflichtend.** Nur vollständig dokumentierte Fehler können nachvollzogen, reproduziert und geprüft werden.
+
+        Falls eine Information nicht bekannt ist, trage ausdrücklich `Nicht bekannt` ein. Falls ein Punkt nicht zutrifft oder keine Daten vorliegen, trage ausdrücklich `Nicht zutreffend` bzw. `Keine vorhanden` ein. Pflichtfelder dürfen nicht leer bleiben.
+
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Fehlerbeschreibung
+      description: Beschreibe den Fehler präzise und eindeutig.
+      placeholder: Was funktioniert nicht und wie äußert sich der Fehler?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction_steps
+    attributes:
+      label: Schritte zur Reproduktion
+      description: Dokumentiere alle Schritte, mit denen sich der Fehler reproduzieren lässt.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+        4. Fehler tritt auf
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Erwartetes Verhalten
+      description: Beschreibe, welches Verhalten korrekt gewesen wäre.
+      placeholder: Erwartet wurde ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Tatsächliches Verhalten
+      description: Beschreibe exakt, was stattdessen passiert.
+      placeholder: Tatsächlich passiert ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reproducibility
+    attributes:
+      label: Reproduzierbarkeit
+      description: Wie zuverlässig lässt sich der Fehler reproduzieren?
+      options:
+        - Immer
+        - Häufig
+        - Sporadisch
+        - Einmalig
+    validations:
+      required: true
+
+  - type: input
+    id: psx_environment
+    attributes:
+      label: PSX-Classic-Umgebung / Modifikation
+      description: Trage die verwendete Umgebung oder Modifikation ein.
+      placeholder: z. B. Project Eris, AutoBleem, BleemSync, RetroBoot oder Stock
+    validations:
+      required: true
+
+  - type: input
+    id: environment_version
+    attributes:
+      label: Version der verwendeten Umgebung / Modifikation
+      description: Trage die genaue Versionsnummer ein. Falls nicht bekannt, trage `Nicht bekannt` ein.
+      placeholder: z. B. 1.0.0 oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: retroarch_version
+    attributes:
+      label: RetroArch-Version
+      description: Trage die genaue verwendete RetroArch-Version ein.
+      placeholder: z. B. 1.21.0
+    validations:
+      required: true
+
+  - type: input
+    id: system
+    attributes:
+      label: Getestetes System / Plattform
+      description: Trage das emulierte System bzw. die relevante Plattform ein.
+      placeholder: z. B. Sony PlayStation / PSX Classic
+    validations:
+      required: true
+
+  - type: input
+    id: core
+    attributes:
+      label: Verwendeter RetroArch-Core
+      description: Trage den exakten Namen des verwendeten Cores ein.
+      placeholder: z. B. PCSX-ReARMed
+    validations:
+      required: true
+
+  - type: input
+    id: core_version
+    attributes:
+      label: Core-Version
+      description: Trage die genaue Core-Version ein. Falls nicht bekannt, trage `Nicht bekannt` ein.
+      placeholder: Versionsnummer oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: game
+    attributes:
+      label: Betroffenes Spiel
+      description: Trage das konkrete Spiel ein, mit dem der Fehler getestet wurde.
+      placeholder: Vollständiger Spieltitel
+    validations:
+      required: true
+
+  - type: input
+    id: game_region
+    attributes:
+      label: Spielregion / Version
+      description: Trage Region, Revision oder Version des Spiels ein. Falls nicht bekannt, trage `Nicht bekannt` ein.
+      placeholder: z. B. PAL-E, NTSC-U, NTSC-J, Rev 1 oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: controller_device
+    attributes:
+      label: Verwendeter Controller / Eingabegerät
+      description: Trage die genaue Gerätebezeichnung ein. Falls kein externes Eingabegerät relevant ist, trage `Nicht zutreffend` ein.
+      placeholder: Gerätebezeichnung oder Nicht zutreffend
+    validations:
+      required: true
+
+  - type: input
+    id: input_driver
+    attributes:
+      label: RetroArch-Eingabetreiber
+      description: Trage den verwendeten RetroArch-Eingabetreiber ein. Falls nicht relevant oder nicht bekannt, muss dies ausdrücklich angegeben werden.
+      placeholder: z. B. udev, sdl2, dinput, xinput oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware und Hardware-Revision
+      description: Dokumentiere relevante Hardware, Adapter, USB-Hubs, Controller-Revisionen und sonstige angeschlossene Geräte. Falls keine zusätzlichen Geräte verwendet werden, trage `Keine vorhanden` ein.
+      placeholder: Hardware, Revisionen und angeschlossene Geräte
+    validations:
+      required: true
+
+  - type: textarea
+    id: modifications
+    attributes:
+      label: Zusätzliche Änderungen / Konfigurationen
+      description: Nenne alle relevanten Änderungen an RetroArch, Core-Optionen, Konfigurationsdateien, Overrides, Remaps oder Systemdateien. Falls keine vorgenommen wurden, trage `Keine vorhanden` ein.
+      placeholder: Änderungen vollständig dokumentieren oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Fehlermeldungen
+      description: Füge relevante Log-Ausgaben oder Fehlermeldungen vollständig ein. Falls keine Logs oder Fehlermeldungen vorhanden sind, trage `Keine vorhanden` ein.
+      render: shell
+      placeholder: Log-Ausgabe, Fehlermeldung oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_evidence
+    attributes:
+      label: Screenshots / Video / weitere Nachweise
+      description: Füge Screenshots, Videos oder Links zu weiteren Nachweisen ein. Falls keine vorhanden sind, trage `Keine vorhanden` ein.
+      placeholder: Nachweise oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_notes
+    attributes:
+      label: Weitere relevante Informationen
+      description: Dokumentiere alle weiteren Informationen, die zur Analyse beitragen können. Falls keine vorhanden sind, trage `Keine vorhanden` ein.
+      placeholder: Weitere Informationen oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      description: Bestätige vor dem Absenden alle Punkte.
+      options:
+        - label: Ich habe geprüft, ob bereits ein Issue zum gleichen Fehler existiert.
+          required: true
+        - label: Ich habe den Fehler mit den oben angegebenen Schritten reproduziert bzw. die tatsächliche Reproduzierbarkeit korrekt angegeben.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig und nach bestem Wissen ausgefüllt.
+          required: true
+        - label: Ich habe keine Pflichtangaben bewusst ausgelassen.
+          required: true
