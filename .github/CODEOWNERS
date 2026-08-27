@@ -1,0 +1,28 @@
+# PSX Classic Modding Hub - Code Owners
+# GitHub automatically requests review from the listed owner(s)
+# when a pull request changes matching files or directories.
+
+# Default owner for all repository changes
+* @bylickilabs
+
+# Controller configurations
+/controller-configs/ @bylickilabs
+
+# GitHub configuration, issue forms, workflows and repository automation
+/.github/ @bylickilabs
+
+# Core repository documentation
+/README.md @bylickilabs
+/CONTRIBUTING.md @bylickilabs
+/SECURITY.md @bylickilabs
+/CODE_OF_CONDUCT.md @bylickilabs
+/NOTICE.md @bylickilabs
+/LICENSE @bylickilabs
+
+# Documentation directories
+/docs/ @bylickilabs
+
+# Future structured data areas
+/core-configs/ @bylickilabs
+/compatibility/ @bylickilabs
+/hardware/ @bylickilabs
