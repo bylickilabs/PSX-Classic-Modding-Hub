@@ -4,7 +4,7 @@
 
 <img src="https://img.shields.io/badge/PSX_CLASSIC-MODDING_HUB-003791?style=for-the-badge&logo=playstation&logoColor=white" alt="PSX Classic Modding Hub">
 
-<br><br>
+<br>
 
 <a href="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/config-validator.yml"><img src="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/config-validator.yml/badge.svg" alt="PSX Classic Config Validator"></a>
 <a href="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/issue-guardian.yml"><img src="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/issue-guardian.yml/badge.svg" alt="PSX Classic Issue Guardian"></a>
