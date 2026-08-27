@@ -97,6 +97,6 @@ input_joypad_driver = "udev"
 
 <br>
 
-## LiCENSE
+## LICENSE
 
 [LICENSE](LICENSE)
