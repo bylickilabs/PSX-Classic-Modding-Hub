@@ -1,0 +1,248 @@
+name: Compatibility Report
+description: Dokumentiere getestete Kombinationen aus Spiel, Core, RetroArch-Version, Controller und PSX-Classic-Setup.
+title: "[Compatibility] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🎮 Compatibility Report
+
+        Vielen Dank für deinen Kompatibilitätsbericht für den PSX Classic Modding Hub.
+
+        **Alle nachfolgenden Angaben sind verpflichtend.** Ziel ist eine belastbare und reproduzierbare Kompatibilitätsdatenbank für konkrete Kombinationen aus Spiel, Core, RetroArch-Version, Controller und PSX-Classic-Setup.
+
+        Falls eine Information nicht bekannt ist, trage ausdrücklich `Nicht bekannt` ein. Falls ein Punkt nicht zutrifft, trage `Nicht zutreffend` ein. Pflichtfelder dürfen nicht leer bleiben.
+
+  - type: dropdown
+    id: compatibility_status
+    attributes:
+      label: Kompatibilitätsstatus
+      description: Wähle das Gesamtergebnis des Tests.
+      options:
+        - Vollständig kompatibel
+        - Kompatibel mit kleineren Einschränkungen
+        - Eingeschränkt kompatibel
+        - Nicht kompatibel
+        - Startet nicht
+        - Absturz während des Tests
+    validations:
+      required: true
+
+  - type: input
+    id: game_title
+    attributes:
+      label: Getestetes Spiel
+      description: Trage den vollständigen Namen des getesteten Spiels ein.
+      placeholder: z. B. Tekken 3
+    validations:
+      required: true
+
+  - type: input
+    id: game_region
+    attributes:
+      label: Region / Version des Spiels
+      description: Gib Region, Release oder Revision des Spiels an.
+      placeholder: z. B. PAL, NTSC-U, NTSC-J, Rev 1
+    validations:
+      required: true
+
+  - type: input
+    id: game_format
+    attributes:
+      label: Spiel- / Image-Format
+      description: Gib das verwendete Dateiformat oder Medienformat an.
+      placeholder: z. B. BIN/CUE, CHD, PBP
+    validations:
+      required: true
+
+  - type: input
+    id: retroarch_version
+    attributes:
+      label: RetroArch-Version
+      description: Trage die exakt getestete RetroArch-Version ein.
+      placeholder: z. B. 1.20.0
+    validations:
+      required: true
+
+  - type: input
+    id: core_name
+    attributes:
+      label: Verwendeter Core
+      description: Trage den exakten Namen des verwendeten RetroArch-Cores ein.
+      placeholder: z. B. PCSX-ReARMed
+    validations:
+      required: true
+
+  - type: input
+    id: core_version
+    attributes:
+      label: Core-Version / Build
+      description: Gib die getestete Core-Version oder den Build an.
+      placeholder: z. B. Commit, Build-Datum oder Versionsnummer
+    validations:
+      required: true
+
+  - type: input
+    id: psx_classic_setup
+    attributes:
+      label: PSX-Classic-Setup
+      description: Beschreibe die verwendete Modding- oder Boot-Umgebung.
+      placeholder: z. B. BleemSync, AutoBleem, Project Eris, RetroBoot
+    validations:
+      required: true
+
+  - type: input
+    id: setup_version
+    attributes:
+      label: Version des PSX-Classic-Setups
+      description: Gib die verwendete Version oder den Build der Modding-Umgebung an.
+      placeholder: z. B. 1.0.0 oder Build-Datum
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware_setup
+    attributes:
+      label: Verwendete Hardware
+      description: Dokumentiere die relevante Hardware des Tests.
+      placeholder: |
+        PlayStation Classic Revision = ...
+        USB-Hub = ...
+        USB-Speicher = ...
+        OTG-Adapter = ...
+        Stromversorgung = ...
+        Weitere Hardware = ...
+    validations:
+      required: true
+
+  - type: input
+    id: controller_name
+    attributes:
+      label: Verwendeter Controller
+      description: Trage die genaue Gerätebezeichnung des Controllers ein.
+      placeholder: z. B. Sony Interactive Entertainment Wireless Controller
+    validations:
+      required: true
+
+  - type: input
+    id: controller_vid_pid
+    attributes:
+      label: Controller VID:PID
+      description: Gib VID:PID in Hexadezimalform an. Falls nicht bekannt, trage `Nicht bekannt` ein.
+      placeholder: z. B. 054C:05C4 oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: input_driver
+    attributes:
+      label: RetroArch-Eingabetreiber
+      description: Trage den tatsächlich verwendeten Eingabetreiber ein.
+      placeholder: z. B. udev, sdl2, dinput, xinput
+    validations:
+      required: true
+
+  - type: textarea
+    id: core_settings
+    attributes:
+      label: Relevante Core-Einstellungen
+      description: Dokumentiere alle vom Standard abweichenden oder für den Test relevanten Core-Optionen.
+      placeholder: |
+        Option 1 = ...
+        Option 2 = ...
+        Option 3 = ...
+        Keine Änderungen = falls Standardwerte verwendet wurden
+    validations:
+      required: true
+
+  - type: textarea
+    id: retroarch_settings
+    attributes:
+      label: Relevante RetroArch-Einstellungen
+      description: Dokumentiere relevante Video-, Audio-, Input-, Latenz- oder sonstige Einstellungen.
+      placeholder: |
+        Video Driver = ...
+        Audio Driver = ...
+        Input Driver = ...
+        VSync = ...
+        Weitere relevante Einstellungen = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: test_scenario
+    attributes:
+      label: Durchgeführter Funktionstest
+      description: Beschreibe konkret, welche Bereiche des Spiels getestet wurden.
+      placeholder: |
+        Start / Boot = ...
+        Menü = ...
+        Gameplay = ...
+        Speicherfunktion = ...
+        Audio = ...
+        Video = ...
+        Controller = ...
+        Besondere Spielsituationen = ...
+    validations:
+      required: true
+
+  - type: input
+    id: test_duration
+    attributes:
+      label: Testdauer
+      description: Gib an, wie lange die Kombination tatsächlich getestet wurde.
+      placeholder: z. B. 60 Minuten, 3 Stunden, vollständiger Durchlauf
+    validations:
+      required: true
+
+  - type: textarea
+    id: observed_behavior
+    attributes:
+      label: Beobachtetes Verhalten
+      description: Beschreibe das tatsächliche Verhalten während des Tests.
+      placeholder: Startverhalten, Performance, Stabilität, Eingabe, Grafik, Audio und sonstige Beobachtungen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: known_issues
+    attributes:
+      label: Bekannte Probleme oder Abweichungen
+      description: Dokumentiere sämtliche festgestellten Probleme, Einschränkungen oder Abweichungen. Falls keine vorhanden sind, trage `Keine bekannt` ein.
+      placeholder: Keine bekannt oder genaue Beschreibung der Abweichungen
+    validations:
+      required: true
+
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Erforderliche Workarounds
+      description: Beschreibe notwendige Anpassungen oder Workarounds. Falls keine notwendig sind, trage `Keine erforderlich` ein.
+      placeholder: Keine erforderlich oder genaue Beschreibung
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Nachweise / zusätzliche Testinformationen
+      description: Gib relevante Logs, Screenshots, Prüfsummen, Konfigurationsdaten oder weitere nachvollziehbare Testinformationen an. Falls keine zusätzlichen Nachweise vorhanden sind, trage `Keine vorhanden` ein.
+      placeholder: Logs, Screenshots, Checksums, Config-Ausschnitte oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      description: Bestätige die Qualität und Reproduzierbarkeit der gemeldeten Testdaten.
+      options:
+        - label: Ich habe diese konkrete Kombination selbst auf der angegebenen Hardware getestet.
+          required: true
+        - label: Die angegebenen Versionen, Einstellungen und Testergebnisse entsprechen dem tatsächlich durchgeführten Test.
+          required: true
+        - label: Bekannte Probleme, Einschränkungen und Workarounds wurden vollständig dokumentiert.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig ausgefüllt und nicht entfernt.
+          required: true
