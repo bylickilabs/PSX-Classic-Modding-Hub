@@ -1,7 +1,5 @@
 <div align="center">
 
-# 🎮 PSX Classic Controller Configs
-
 <img src="https://img.shields.io/badge/PSX_CLASSIC-MODDING_HUB-003791?style=for-the-badge&logo=playstation&logoColor=white" alt="PSX Classic Modding Hub">
 
 <br><br>
