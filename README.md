@@ -1,12 +1,15 @@
 # PSX Classic Controller Configs
 
+| [![Controller / Device Report](https://img.shields.io/badge/Issue-Controller%20%2F%20Device%20Report-blue?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=retroarch-controller-report.yml) |[![Bug Report](https://img.shields.io/badge/Issue-Bug%20Report-red?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=bug-report.yml) |[![Feature Request](https://img.shields.io/badge/Issue-Feature%20Request-brightgreen?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=feature-request.yml) |[![Compatibility Report](https://img.shields.io/badge/Issue-Compatibility%20Report-success?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=compatibility-report.yml) |[![Core / Configuration Report](https://img.shields.io/badge/Issue-Core%20%2F%20Configuration-orange?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=core-configuration-report.yml) |[![Documentation Issue](https://img.shields.io/badge/Issue-Documentation-yellow?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=documentation-issue.yml) |[![Hardware / USB Device Report](https://img.shields.io/badge/Issue-Hardware%20%2F%20USB-purple?style=for-the-badge&logo=github)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=hardware-usb-device-report.yml) |
+|---|---|---|---|---|---|---|
+
+| <img width="1280" height="640" alt="PSx (1)" src="https://github.com/user-attachments/assets/df64f716-08af-4140-bf81-66548df4edcf" /> |
+|---|
+
 - RetroArch-Autoconfig-Profile für ausgewählte SNES- und N64-Controller an der **Sony PlayStation Classic** mit **BleemSync + RetroArch**.
 
 - Dieses Repository dokumentiert zwei Controller, die auf einem realen PS-Classic-System erkannt, eingerichtet und im Spielbetrieb getestet wurden. 
   - Ziel ist eine reproduzierbare Installation ohne unnötige Änderungen an der globalen `retroarch.cfg`.
-
-| <img width="1280" height="640" alt="PSx (1)" src="https://github.com/user-attachments/assets/df64f716-08af-4140-bf81-66548df4edcf" /> |
-|---|
 
 <br>
 
