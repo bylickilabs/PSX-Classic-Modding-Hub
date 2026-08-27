@@ -1,0 +1,180 @@
+name: RetroArch Controller / Device Report
+description: Melde eine getestete RetroArch-Controller- oder Gerätekonfiguration für den PSX Classic Modding Hub.
+title: "[Controller] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🎮 RetroArch Controller / Device Contribution
+
+        Vielen Dank für deinen Beitrag zum PSX Classic Modding Hub.
+
+        **Alle nachfolgenden Angaben sind verpflichtend.** Unvollständige Meldungen können nicht geprüft oder übernommen werden.
+
+        Falls eine Information nicht bekannt ist, trage ausdrücklich `Nicht bekannt` ein. Falls keine Abweichungen oder weiteren Hardware-Revisionen bekannt sind, trage ausdrücklich `Keine bekannt` ein.
+
+  - type: input
+    id: device_name
+    attributes:
+      label: Genaue RetroArch-Gerätebezeichnung
+      description: Trage die Gerätebezeichnung exakt so ein, wie RetroArch sie erkennt.
+      placeholder: z. B. Sony Interactive Entertainment Wireless Controller
+    validations:
+      required: true
+
+  - type: input
+    id: vendor_id_decimal
+    attributes:
+      label: Vendor-ID (VID) in Dezimalform
+      description: Die Vendor-ID muss in Dezimalform angegeben werden.
+      placeholder: z. B. 1356
+    validations:
+      required: true
+
+  - type: input
+    id: product_id_decimal
+    attributes:
+      label: Product-ID (PID) in Dezimalform
+      description: Die Product-ID muss in Dezimalform angegeben werden.
+      placeholder: z. B. 1476
+    validations:
+      required: true
+
+  - type: input
+    id: vid_pid_hex
+    attributes:
+      label: VID:PID in Hexadezimalform
+      description: Trage VID:PID in Hexadezimalform ein. Falls nicht bekannt, muss `Nicht bekannt` eingetragen werden.
+      placeholder: z. B. 054C:05C4 oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: input_driver
+    attributes:
+      label: Verwendeter RetroArch-Eingabetreiber
+      description: Trage den tatsächlich verwendeten RetroArch-Eingabetreiber ein.
+      placeholder: z. B. udev, sdl2, dinput, xinput
+    validations:
+      required: true
+
+  - type: textarea
+    id: button_mapping
+    attributes:
+      label: Vollständige Tastenbelegung
+      description: Dokumentiere die komplette Belegung aller vorhandenen Tasten, Schultertasten, D-Pad-Richtungen, Analogsticks, Achsen, Start/Select und sonstigen Eingaben.
+      placeholder: |
+        D-Pad Up = ...
+        D-Pad Down = ...
+        D-Pad Left = ...
+        D-Pad Right = ...
+        Cross / A = ...
+        Circle / B = ...
+        Square / X = ...
+        Triangle / Y = ...
+        L1 = ...
+        R1 = ...
+        L2 = ...
+        R2 = ...
+        L3 = ...
+        R3 = ...
+        Select = ...
+        Start = ...
+        Left Analog X = ...
+        Left Analog Y = ...
+        Right Analog X = ...
+        Right Analog Y = ...
+        Weitere Eingaben = ...
+    validations:
+      required: true
+
+  - type: input
+    id: tested_system
+    attributes:
+      label: Getestetes System
+      description: Gib das System bzw. die Plattform an, auf der die Konfiguration getestet wurde.
+      placeholder: z. B. PlayStation Classic / RetroArch
+    validations:
+      required: true
+
+  - type: input
+    id: tested_core
+    attributes:
+      label: Getesteter RetroArch-Core
+      description: Trage den für den Funktionstest verwendeten Core ein.
+      placeholder: z. B. PCSX-ReARMed
+    validations:
+      required: true
+
+  - type: input
+    id: tested_game
+    attributes:
+      label: Konkretes getestetes Spiel
+      description: Gib mindestens ein konkretes Spiel an, mit dem der Funktionstest durchgeführt wurde.
+      placeholder: Spieltitel hier eintragen
+    validations:
+      required: true
+
+  - type: textarea
+    id: test_result
+    attributes:
+      label: Ergebnis des Funktionstests
+      description: Beschreibe, ob Controller-Erkennung, Tasten, Analogsticks, Schultertasten, Start/Select und sonstige Eingaben korrekt funktionieren.
+      placeholder: Funktionstest vollständig beschreiben
+    validations:
+      required: true
+
+  - type: textarea
+    id: deviations
+    attributes:
+      label: Bekannte Abweichungen oder Besonderheiten
+      description: Dokumentiere sämtliche bekannten Abweichungen, Einschränkungen oder Besonderheiten. Falls keine bekannt sind, muss `Keine bekannt` eingetragen werden.
+      placeholder: Abweichungen eintragen oder Keine bekannt
+    validations:
+      required: true
+
+  - type: input
+    id: manufacturer
+    attributes:
+      label: Hersteller
+      description: Trage den Hersteller des Controllers oder Geräts ein.
+      placeholder: Hersteller
+    validations:
+      required: true
+
+  - type: input
+    id: model
+    attributes:
+      label: Modellbezeichnung
+      description: Trage die genaue Modellbezeichnung ein.
+      placeholder: Modellbezeichnung
+    validations:
+      required: true
+
+  - type: input
+    id: hardware_revision
+    attributes:
+      label: Hardware-Revision / Version
+      description: Trage die erkennbare Hardware-Revision oder Version ein. Falls nicht bekannt, muss `Nicht bekannt` eingetragen werden.
+      placeholder: Revision / Version oder Nicht bekannt
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternate_revisions
+    attributes:
+      label: Bekannte abweichende Hardware-Revisionen
+      description: Dokumentiere weitere bekannte Revisionen, die sich bei VID, PID, Tastenbelegung oder Verhalten unterscheiden. Falls keine bekannt sind, muss `Keine bekannt` eingetragen werden.
+      placeholder: Abweichende Revisionen beschreiben oder Keine bekannt
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      description: Diese Bestätigung ist für die Einreichung erforderlich.
+      options:
+        - label: Ich bestätige, dass alle Angaben auf realer Hardware getestet wurden und alle Pflichtfelder vollständig und wahrheitsgemäß ausgefüllt sind.
+          required: true
