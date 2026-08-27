@@ -1,0 +1,253 @@
+name: PSX Classic Config Validator
+
+on:
+  pull_request:
+    paths:
+      - "controller-configs/**"
+      - ".github/workflows/config-validator.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "controller-configs/**"
+      - ".github/workflows/config-validator.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: config-validator-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  config-validieren:
+    name: Controller-Konfigurationen validieren
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: RetroArch-Konfigurationen prüfen
+        shell: python
+        run: |
+          import os
+          import re
+          import sys
+          from pathlib import Path
+
+          root = Path("controller-configs")
+          fehler = []
+          warnungen = []
+          gepruefte_dateien = []
+
+          verbotene_endungen = {
+              ".bin", ".iso", ".img", ".pbp", ".chd", ".cue", ".rom",
+              ".zip", ".7z", ".rar", ".exe", ".dll", ".so", ".dylib"
+          }
+
+          erforderliche_schluessel = {
+              "input_driver",
+              "input_device",
+              "input_vendor_id",
+              "input_product_id",
+          }
+
+          bekannte_treiber = {
+              "udev", "sdl2", "sdl", "xinput", "dinput", "hid",
+              "linuxraw", "parport", "android", "qnx"
+          }
+
+          geheimnis_muster = [
+              ("GitHub Personal Access Token", re.compile(r"\bghp_[A-Za-z0-9]{20,}\b")),
+              ("GitHub Fine-Grained Token", re.compile(r"\bgithub_pat_[A-Za-z0-9_]{20,}\b")),
+              ("Private-Key-Block", re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----")),
+              ("AWS Access Key", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
+          ]
+
+          def wert_bereinigen(wert: str) -> str:
+              wert = wert.strip()
+              if len(wert) >= 2 and wert[0] == wert[-1] and wert[0] in {'"', "'"}:
+                  return wert[1:-1]
+              return wert
+
+          def melden(liste, datei, text):
+              liste.append(f"{datei.as_posix()}: {text}")
+
+          if not root.exists():
+              fehler.append("Verzeichnis 'controller-configs/' fehlt.")
+          elif not root.is_dir():
+              fehler.append("'controller-configs' ist kein Verzeichnis.")
+          else:
+              alle_dateien = sorted(p for p in root.rglob("*") if p.is_file() or p.is_symlink())
+
+              if not alle_dateien:
+                  fehler.append("Im Verzeichnis 'controller-configs/' wurden keine Dateien gefunden.")
+
+              for datei in alle_dateien:
+                  if datei.is_symlink():
+                      melden(fehler, datei, "Symbolische Links sind in controller-configs nicht erlaubt.")
+                      continue
+
+                  if datei.suffix.lower() in verbotene_endungen:
+                      melden(fehler, datei, f"Unerlaubter Dateityp '{datei.suffix}'. ROM-, BIOS-, Datenträger-, Archiv- und Binärdateien gehören nicht in controller-configs/.")
+                      continue
+
+                  if datei.suffix.lower() != ".cfg":
+                      melden(fehler, datei, "In controller-configs/ sind ausschließlich RetroArch-.cfg-Dateien zulässig.")
+                      continue
+
+                  if datei.name.lower() == "retroarch.cfg":
+                      melden(fehler, datei, "Die globale retroarch.cfg darf nicht in diesem Repository bereitgestellt werden.")
+                      continue
+
+                  if datei.stat().st_size == 0:
+                      melden(fehler, datei, "Die Konfigurationsdatei ist leer.")
+                      continue
+
+                  if datei.stat().st_size > 65536:
+                      melden(fehler, datei, "Die Konfigurationsdatei ist größer als 64 KiB und damit für ein Controller-Autoconfig-Profil ungewöhnlich groß.")
+
+                  try:
+                      text = datei.read_text(encoding="utf-8")
+                  except UnicodeDecodeError:
+                      melden(fehler, datei, "Die Datei ist nicht als UTF-8 lesbar.")
+                      continue
+
+                  gepruefte_dateien.append(datei)
+
+                  for bezeichnung, muster in geheimnis_muster:
+                      if muster.search(text):
+                          melden(fehler, datei, f"Mögliches Secret erkannt: {bezeichnung}.")
+
+                  werte = {}
+                  zeilen = {}
+
+                  for nummer, rohzeile in enumerate(text.splitlines(), start=1):
+                      zeile = rohzeile.strip()
+                      if not zeile or zeile.startswith("#"):
+                          continue
+
+                      match = re.match(r"^([A-Za-z0-9_]+)\s*=\s*(.*?)\s*$", zeile)
+                      if not match:
+                          melden(fehler, datei, f"Zeile {nummer} hat kein gültiges 'schluessel = wert'-Format: {rohzeile!r}")
+                          continue
+
+                      schluessel, rohwert = match.groups()
+                      wert = wert_bereinigen(rohwert)
+
+                      if schluessel in werte:
+                          melden(fehler, datei, f"Schlüssel '{schluessel}' ist doppelt vorhanden (Zeilen {zeilen[schluessel]} und {nummer}).")
+                          continue
+
+                      werte[schluessel] = wert
+                      zeilen[schluessel] = nummer
+
+                      if wert == "":
+                          melden(fehler, datei, f"Schlüssel '{schluessel}' besitzt einen leeren Wert (Zeile {nummer}).")
+
+                  fehlende = sorted(erforderliche_schluessel - set(werte))
+                  for schluessel in fehlende:
+                      melden(fehler, datei, f"Erforderlicher Schlüssel '{schluessel}' fehlt.")
+
+                  for id_schluessel, name in (("input_vendor_id", "Vendor-ID"), ("input_product_id", "Product-ID")):
+                      if id_schluessel not in werte:
+                          continue
+                      wert = werte[id_schluessel]
+                      if not re.fullmatch(r"\d+", wert):
+                          melden(fehler, datei, f"{name} muss als positive Dezimalzahl angegeben werden; gefunden: {wert!r}.")
+                          continue
+                      nummer = int(wert)
+                      if not 0 <= nummer <= 65535:
+                          melden(fehler, datei, f"{name} liegt außerhalb des gültigen USB-ID-Bereichs 0–65535: {nummer}.")
+
+                  if "input_driver" in werte:
+                      treiber = werte["input_driver"].lower()
+                      if treiber and treiber not in bekannte_treiber:
+                          melden(warnungen, datei, f"Unbekannter oder projektspezifischer Input-Treiber '{werte['input_driver']}'. Bitte manuell prüfen.")
+
+                  mappings = [
+                      key for key, value in werte.items()
+                      if key.startswith("input_")
+                      and not key.endswith("_label")
+                      and key not in erforderliche_schluessel
+                      and value != ""
+                  ]
+                  if not mappings:
+                      melden(fehler, datei, "Es wurde keine Tasten-, Achsen- oder Richtungsbelegung gefunden.")
+
+                  hex_match = re.search(
+                      r"VID:PID[^\n]*?([0-9A-Fa-f]{4}):([0-9A-Fa-f]{4})",
+                      text,
+                      re.IGNORECASE,
+                  )
+                  if hex_match and all(k in werte for k in ("input_vendor_id", "input_product_id")):
+                      try:
+                          erwartet_vendor = int(werte["input_vendor_id"])
+                          erwartet_product = int(werte["input_product_id"])
+                          dokumentiert_vendor = int(hex_match.group(1), 16)
+                          dokumentiert_product = int(hex_match.group(2), 16)
+                          if (erwartet_vendor, erwartet_product) != (dokumentiert_vendor, dokumentiert_product):
+                              melden(
+                                  fehler,
+                                  datei,
+                                  "Dokumentierte hexadezimale VID:PID stimmt nicht mit input_vendor_id/input_product_id überein: "
+                                  f"Kommentar={hex_match.group(1).upper()}:{hex_match.group(2).upper()}, "
+                                  f"Konfiguration={erwartet_vendor:04X}:{erwartet_product:04X}.",
+                              )
+                      except ValueError:
+                          pass
+
+          print("\n=== PSX Classic Config Validator ===")
+          print(f"Geprüfte .cfg-Dateien: {len(gepruefte_dateien)}")
+
+          if warnungen:
+              print(f"Warnungen: {len(warnungen)}")
+              for warnung in warnungen:
+                  print(f"::warning::{warnung}")
+          else:
+              print("Warnungen: 0")
+
+          if fehler:
+              print(f"Fehler: {len(fehler)}")
+              for eintrag in fehler:
+                  print(f"::error::{eintrag}")
+              ergebnis = "FEHLGESCHLAGEN"
+          else:
+              print("Fehler: 0")
+              print("Ergebnis: VALIDIERUNG ERFOLGREICH")
+              ergebnis = "ERFOLGREICH"
+
+          summary = os.environ.get("GITHUB_STEP_SUMMARY")
+          if summary:
+              with open(summary, "a", encoding="utf-8") as f:
+                  f.write("# PSX Classic Config Validator\n\n")
+                  f.write(f"**Ergebnis:** {ergebnis}\n\n")
+                  f.write(f"- Geprüfte `.cfg`-Dateien: **{len(gepruefte_dateien)}**\n")
+                  f.write(f"- Fehler: **{len(fehler)}**\n")
+                  f.write(f"- Warnungen: **{len(warnungen)}**\n\n")
+
+                  if gepruefte_dateien:
+                      f.write("## Geprüfte Profile\n\n")
+                      for datei in gepruefte_dateien:
+                          f.write(f"- `{datei.as_posix()}`\n")
+                      f.write("\n")
+
+                  if fehler:
+                      f.write("## Fehler\n\n")
+                      for eintrag in fehler:
+                          f.write(f"- ❌ {eintrag}\n")
+                      f.write("\n")
+
+                  if warnungen:
+                      f.write("## Warnungen\n\n")
+                      for warnung in warnungen:
+                          f.write(f"- ⚠️ {warnung}\n")
+                      f.write("\n")
+
+                  if not fehler:
+                      f.write("✅ Alle Controller-Konfigurationen erfüllen die automatisierten Prüfregeln.\n")
+
+          if fehler:
+              sys.exit(1)
