@@ -1,0 +1,279 @@
+name: PSX Classic Issue Guardian
+
+on:
+  issues:
+    types: [opened, edited, reopened, closed]
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: issue-guardian-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  issue-verarbeiten:
+    name: Issue klassifizieren und überwachen
+    if: github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Issue Guardian ausführen
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue = context.payload.issue;
+            const action = context.payload.action;
+
+            const typen = [
+              { prefix: '[Controller]', marker: 'RetroArch Controller / Device Contribution', label: 'typ:controller', color: '0969DA', beschreibung: 'Controller- oder Gerätebericht' },
+              { prefix: '[Bug]', marker: 'Bug Report', label: 'typ:bug', color: 'D1242F', beschreibung: 'Fehlermeldung' },
+              { prefix: '[Feature]', marker: 'Feature Request', label: 'typ:feature', color: '1F883D', beschreibung: 'Funktions- oder Erweiterungsvorschlag' },
+              { prefix: '[Compatibility]', marker: 'Compatibility Report', label: 'typ:kompatibilität', color: '2DA44E', beschreibung: 'Kompatibilitätsbericht' },
+              { prefix: '[Core/Config]', marker: 'Core / Configuration Report', label: 'typ:core-konfiguration', color: 'FB8C00', beschreibung: 'Core- oder Konfigurationsbericht' },
+              { prefix: '[Documentation]', marker: 'Documentation Issue', label: 'typ:dokumentation', color: 'D4C5F9', beschreibung: 'Dokumentationsmeldung' },
+              { prefix: '[Hardware/USB]', marker: 'Hardware / USB Device Report', label: 'typ:hardware-usb', color: '8250DF', beschreibung: 'Hardware- oder USB-Gerätebericht' }
+            ];
+
+            const statusLabels = {
+              pruefung: { name: 'status:prüfung', color: 'BF8700', description: 'Wartet auf Prüfung durch den Maintainer' },
+              info: { name: 'status:info-fehlt', color: 'BC4C00', description: 'Zusätzliche Informationen werden benötigt' },
+              erledigt: { name: 'status:erledigt', color: '57606A', description: 'Issue wurde abgeschlossen' },
+              sicherheit: { name: 'sicherheit:prüfen', color: 'B60205', description: 'Möglicherweise sicherheitsrelevanter Inhalt' }
+            };
+
+            async function labelSicherstellen(name, color, description) {
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                await github.rest.issues.createLabel({ owner, repo, name, color, description });
+              }
+            }
+
+            for (const typ of typen) await labelSicherstellen(typ.label, typ.color, typ.beschreibung);
+            for (const label of Object.values(statusLabels)) await labelSicherstellen(label.name, label.color, label.description);
+
+            const body = issue.body || '';
+            const titel = issue.title || '';
+            const aktuellerTyp = typen.find(t => titel.startsWith(t.prefix)) || typen.find(t => body.includes(t.marker));
+            const aktuelleLabels = (issue.labels || []).map(l => typeof l === 'string' ? l : l.name);
+
+            if (action === 'closed') {
+              const entfernen = [statusLabels.pruefung.name, statusLabels.info.name].filter(l => aktuelleLabels.includes(l));
+              for (const name of entfernen) {
+                try { await github.rest.issues.removeLabel({ owner, repo, issue_number: issue.number, name }); } catch (e) { if (e.status !== 404) throw e; }
+              }
+              if (!aktuelleLabels.includes(statusLabels.erledigt.name)) {
+                await github.rest.issues.addLabels({ owner, repo, issue_number: issue.number, labels: [statusLabels.erledigt.name] });
+              }
+              return;
+            }
+
+            if (action === 'reopened' && aktuelleLabels.includes(statusLabels.erledigt.name)) {
+              try { await github.rest.issues.removeLabel({ owner, repo, issue_number: issue.number, name: statusLabels.erledigt.name }); } catch (e) { if (e.status !== 404) throw e; }
+            }
+
+            if (aktuellerTyp) {
+              const falscheTypLabels = typen.map(t => t.label).filter(l => l !== aktuellerTyp.label && aktuelleLabels.includes(l));
+              for (const name of falscheTypLabels) {
+                try { await github.rest.issues.removeLabel({ owner, repo, issue_number: issue.number, name }); } catch (e) { if (e.status !== 404) throw e; }
+              }
+              if (!aktuelleLabels.includes(aktuellerTyp.label)) {
+                await github.rest.issues.addLabels({ owner, repo, issue_number: issue.number, labels: [aktuellerTyp.label] });
+              }
+            }
+
+            const hatStatus = aktuelleLabels.some(l => l.startsWith('status:'));
+            if (!hatStatus || action === 'reopened') {
+              await github.rest.issues.addLabels({ owner, repo, issue_number: issue.number, labels: [statusLabels.pruefung.name] });
+            }
+
+            if (!(issue.assignees || []).some(a => a.login === 'bylickilabs')) {
+              try {
+                await github.rest.issues.addAssignees({ owner, repo, issue_number: issue.number, assignees: ['bylickilabs'] });
+              } catch (error) {
+                core.warning(`@bylickilabs konnte nicht automatisch zugewiesen werden: ${error.message}`);
+              }
+            }
+
+            const sicherheitsText = `${titel}\n${body}`.toLowerCase();
+            const sicherheitsWoerter = [
+              'sicherheitslücke', 'security vulnerability', 'vulnerability', 'credential', 'zugangsdaten',
+              'private key', 'privater schlüssel', 'api key', 'token', 'passwort', 'password', 'malware', 'secret'
+            ];
+            const sicherheitsTreffer = sicherheitsWoerter.some(w => sicherheitsText.includes(w));
+
+            if (sicherheitsTreffer) {
+              await github.rest.issues.addLabels({ owner, repo, issue_number: issue.number, labels: [statusLabels.sicherheit.name] });
+              const kommentare = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number: issue.number, per_page: 100 });
+              const marker = '<!-- issue-guardian:sicherheitswarnung -->';
+              if (!kommentare.some(c => (c.body || '').includes(marker))) {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: issue.number,
+                  body: `${marker}\n⚠️ **Möglicherweise sicherheitsrelevante Meldung**\n\nBitte veröffentliche keine Zugangsdaten, Tokens, privaten Schlüssel oder detaillierte Informationen zu einer noch ungeprüften Sicherheitslücke in diesem öffentlichen Issue. Sicherheitsprobleme müssen gemäß [SECURITY.md](../blob/main/SECURITY.md) vertraulich an **bylicki@mail.de** gemeldet werden. Falls bereits sensible Daten veröffentlicht wurden, entferne sie bitte soweit möglich und widerrufe betroffene Zugangsdaten.`
+                });
+              }
+            }
+
+            function normalisieren(value) {
+              return (value || '').toLowerCase().replace(/[`*_]/g, '').replace(/\s+/g, ' ').trim();
+            }
+
+            function feldAuslesen(text, namen) {
+              for (const name of namen) {
+                const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`###\\s+${escaped}\\s*\\n+([\\s\\S]*?)(?=\\n###\\s+|$)`, 'i');
+                const match = text.match(regex);
+                if (match) {
+                  const wert = normalisieren(match[1].replace(/_No response_/gi, '').replace(/Keine Antwort/gi, ''));
+                  if (wert) return wert;
+                }
+              }
+              return '';
+            }
+
+            async function moeglicheDuplikatePruefen() {
+              if (!aktuellerTyp || action !== 'opened') return;
+              let felder = [];
+              if (aktuellerTyp.label === 'typ:kompatibilität') {
+                felder = [
+                  ['Getestetes Spiel'],
+                  ['Verwendeter Core'],
+                  ['RetroArch-Version']
+                ];
+              } else if (aktuellerTyp.label === 'typ:hardware-usb') {
+                felder = [
+                  ['Hersteller'],
+                  ['Modell', 'Modell / Produktbezeichnung', 'Produktbezeichnung'],
+                  ['VID:PID in Hexadezimalform', 'VID:PID']
+                ];
+              } else {
+                return;
+              }
+
+              const schluessel = felder.map(n => feldAuslesen(body, n));
+              if (schluessel.some(v => !v)) return;
+
+              const alle = await github.paginate(github.rest.issues.listForRepo, { owner, repo, state: 'all', per_page: 100 });
+              const treffer = [];
+              for (const kandidat of alle) {
+                if (kandidat.pull_request || kandidat.number === issue.number) continue;
+                const kandidatBody = kandidat.body || '';
+                const kandidatTyp = typen.find(t => (kandidat.title || '').startsWith(t.prefix)) || typen.find(t => kandidatBody.includes(t.marker));
+                if (!kandidatTyp || kandidatTyp.label !== aktuellerTyp.label) continue;
+                const kandidatSchluessel = felder.map(n => feldAuslesen(kandidatBody, n));
+                if (kandidatSchluessel.every((v, i) => v && v === schluessel[i])) treffer.push(kandidat);
+                if (treffer.length >= 3) break;
+              }
+
+              if (treffer.length) {
+                const marker = '<!-- issue-guardian:duplikat-hinweis -->';
+                const links = treffer.map(i => `- #${i.number} – ${i.title}`).join('\n');
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: issue.number,
+                  body: `${marker}\n🔎 **Möglicherweise bereits dokumentiert**\n\nDer Issue Guardian hat vorhandene Meldungen mit denselben Kerndaten gefunden:\n\n${links}\n\nBitte kurz prüfen, ob es sich tatsächlich um dieselbe Kombination bzw. Hardware handelt. Dieses Issue wird **nicht automatisch geschlossen**.`
+                });
+              }
+            }
+
+            await moeglicheDuplikatePruefen();
+
+  offene-issues-pruefen:
+    name: Offene Issues und Fristen prüfen
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Tägliche Issue-Prüfung
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const jetzt = new Date();
+            const issues = (await github.paginate(github.rest.issues.listForRepo, { owner, repo, state: 'open', per_page: 100 }))
+              .filter(i => !i.pull_request);
+
+            const zaehler = {
+              gesamt: issues.length,
+              pruefung: 0,
+              info: 0,
+              controller: 0,
+              bug: 0,
+              feature: 0,
+              kompatibilitaet: 0,
+              core: 0,
+              dokumentation: 0,
+              hardware: 0,
+              alt30: 0
+            };
+
+            function labelsVon(issue) {
+              return (issue.labels || []).map(l => typeof l === 'string' ? l : l.name);
+            }
+
+            async function kommentarFallsNichtVorhanden(issueNumber, marker, body) {
+              const kommentare = await github.paginate(github.rest.issues.listComments, { owner, repo, issue_number: issueNumber, per_page: 100 });
+              if (!kommentare.some(c => (c.body || '').includes(marker))) {
+                await github.rest.issues.createComment({ owner, repo, issue_number: issueNumber, body: `${marker}\n${body}` });
+              }
+            }
+
+            for (const issue of issues) {
+              const labels = labelsVon(issue);
+              const tageSeitUpdate = Math.floor((jetzt - new Date(issue.updated_at)) / 86400000);
+              const tageSeitErstellung = Math.floor((jetzt - new Date(issue.created_at)) / 86400000);
+
+              if (labels.includes('typ:controller')) zaehler.controller++;
+              if (labels.includes('typ:bug')) zaehler.bug++;
+              if (labels.includes('typ:feature')) zaehler.feature++;
+              if (labels.includes('typ:kompatibilität')) zaehler.kompatibilitaet++;
+              if (labels.includes('typ:core-konfiguration')) zaehler.core++;
+              if (labels.includes('typ:dokumentation')) zaehler.dokumentation++;
+              if (labels.includes('typ:hardware-usb')) zaehler.hardware++;
+              if (tageSeitErstellung >= 30) zaehler.alt30++;
+
+              if (labels.includes('status:prüfung')) {
+                zaehler.pruefung++;
+                if (tageSeitUpdate >= 7) {
+                  await kommentarFallsNichtVorhanden(
+                    issue.number,
+                    '<!-- issue-guardian:review-reminder -->',
+                    '⏱️ **Issue Guardian – Prüfhinweis**\n\nDieses Issue wartet seit mindestens 7 Tagen ohne weitere Aktivität auf Prüfung. Dieser Hinweis dient ausschließlich der internen Nachverfolgung; das Issue wird nicht automatisch geschlossen.'
+                  );
+                }
+              }
+
+              if (labels.includes('status:info-fehlt') || labels.includes('needs-info')) {
+                zaehler.info++;
+                if (tageSeitUpdate >= 14) {
+                  await kommentarFallsNichtVorhanden(
+                    issue.number,
+                    '<!-- issue-guardian:info-reminder -->',
+                    'ℹ️ **Issue Guardian – Rückmeldung benötigt**\n\nFür dieses Issue werden seit mindestens 14 Tagen zusätzliche Informationen benötigt. Bitte ergänze die angeforderten Angaben, sobald sie verfügbar sind. Das Issue wird durch diesen Workflow nicht automatisch geschlossen.'
+                  );
+                }
+              }
+            }
+
+            await core.summary
+              .addHeading('PSX Classic Modding Hub – Issue-Status')
+              .addTable([
+                [{ data: 'Kennzahl', header: true }, { data: 'Anzahl', header: true }],
+                ['Offene Issues', String(zaehler.gesamt)],
+                ['Warten auf Prüfung', String(zaehler.pruefung)],
+                ['Warten auf Informationen', String(zaehler.info)],
+                ['Controller / Device Reports', String(zaehler.controller)],
+                ['Bug Reports', String(zaehler.bug)],
+                ['Feature Requests', String(zaehler.feature)],
+                ['Compatibility Reports', String(zaehler.kompatibilitaet)],
+                ['Core / Configuration Reports', String(zaehler.core)],
+                ['Documentation Issues', String(zaehler.dokumentation)],
+                ['Hardware / USB Device Reports', String(zaehler.hardware)],
+                ['Älter als 30 Tage', String(zaehler.alt30)]
+              ])
+              .addRaw('\nDer Workflow schließt Issues niemals automatisch.\n')
+              .write();
