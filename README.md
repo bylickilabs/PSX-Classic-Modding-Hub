@@ -25,7 +25,7 @@
 
 <br>
 
-## Enthaltene Controller
+## Enthaltene Controller Configs (cfg)
 
 | System | Gerät | RetroArch-Erkennung | VID/PID | Status | Amazon |
 |---|---|---|---|---|---|
