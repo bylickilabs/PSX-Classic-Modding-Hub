@@ -23,6 +23,44 @@
 - Dieses Repository dokumentiert zwei Controller, die auf einem realen PS-Classic-System erkannt, eingerichtet und im Spielbetrieb getestet wurden. 
   - Ziel ist eine reproduzierbare Installation ohne unnötige Änderungen an der globalen `retroarch.cfg`.
 
+---
+
+> [!NOTE]
+> **DEM­NÄCHST // MOTD INSTALLER**
+>
+> PSx Classic // SSH Terminal // BleemSync // BYLICKILABS
+
+| <img width="3151" height="1267" alt="789216637_1457225999803697_6728038102925628821_n" src="https://github.com/user-attachments/assets/4a7a58b9-7ec7-4ecc-80a2-5c4622e5dd38" /> | <img width="3152" height="1269" alt="786375696_1457230399803257_2310485534073744596_n" src="https://github.com/user-attachments/assets/61cd326e-4426-46cf-b7b5-24e4eca22330" /> |
+|--|---|
+
+### MOTD // SYSTEM STATUS
+
+| Komponente | Umgebung | Funktion | Status |
+|---|---|---|---|
+| PlayStation Classic | Linux | Zielsystem | ✅ getestet |
+| BleemSync | Custom Mod Environment | Runtime / Mod-Basis | ✅ getestet |
+| SSH | OpenSSH | Remote-Systemzugriff | ✅ getestet |
+| Root Access | Linux | Installation in `/etc/profile.d/` | ✅ getestet |
+| `motd-bs.sh` | Shell | Dynamischer SSH-Login-Banner | ✅ funktioniert |
+| PowerShell Installer | Windows 10 / 11 | Automatisiertes Deployment | 🔧 in Entwicklung |
+| SCP | OpenSSH | Übertragung der MOTD | ✅ unterstützt |
+| Systeminformationen | `/proc` / Linux | CPU, RAM, Temperatur, Storage | ✅ dynamisch |
+| Backup | BleemSync Storage | Sicherung der Original-MOTD | ✅ integriert |
+| Neustart / Verifikation | PlayStation Classic | Aktivierung und Prüfung | ✅ integriert |
+
+### KOMPATIBILITÄT
+
+| System / Umgebung | Status | Hinweis |
+|---|---|---|
+| PlayStation Classic | ✅ getestet | Entwicklungs- und Zielplattform |
+| BleemSync | ✅ getestet | Primär unterstützte Mod-Umgebung |
+| Windows 10 / 11 | ✅ unterstützt | Host-System für den Installer |
+| Windows OpenSSH | ✅ erforderlich | SSH- und SCP-Kommunikation |
+| AutoBleem | ⚪ nicht getestet | Keine Kompatibilitätsgarantie |
+| Project Eris | ⚪ nicht getestet | Keine Kompatibilitätsgarantie |
+
+---
+
 <br>
 
 ## Enthaltene Controller Configs (cfg)
