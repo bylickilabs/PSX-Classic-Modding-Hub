@@ -50,14 +50,14 @@
 
 ### KOMPATIBILITÄT
 
-| System / Umgebung | Status | Hinweis |
-|---|---|---|
-| PlayStation Classic | ✅ getestet | Entwicklungs- und Zielplattform |
-| BleemSync | ✅ getestet | Primär unterstützte Mod-Umgebung |
-| Windows 10 / 11 | ✅ unterstützt | Host-System für den Installer |
-| Windows OpenSSH | ✅ erforderlich | SSH- und SCP-Kommunikation |
-| AutoBleem | ⚪ nicht getestet | Keine Kompatibilitätsgarantie |
-| Project Eris | ⚪ nicht getestet | Keine Kompatibilitätsgarantie |
+| System / Umgebung | Status | Hinweis | ISSUE | 
+|---|---|---|---|
+| PlayStation Classic | ✅ getestet | Entwicklungs- und Zielplattform | |
+| BleemSync | ✅ getestet | Primär unterstützte Mod-Umgebung | |
+| Windows 10 / 11 | ✅ unterstützt | Host-System für den Installer | |
+| Windows OpenSSH | ✅ erforderlich | SSH- und SCP-Kommunikation | |
+| AutoBleem | ⚪ nicht getestet | Keine Kompatibilitätsgarantie | [ISSUE](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=autobleem-compatibility.yml) | 
+| Project Eris | ⚪ nicht getestet | Keine Kompatibilitätsgarantie | [ISSUE](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/issues/new?template=project-eris-compatibility.yml) |
 
 ---
 
