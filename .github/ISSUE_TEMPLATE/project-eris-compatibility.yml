@@ -1,0 +1,216 @@
+name: Project Eris Compatibility Report
+description: Dokumentiere die Kompatibilität von Project Eris mit dem PSx Classic Custom SSH MOTD und dem zugehörigen Installer.
+title: "[Project Eris] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # 🟥 Project Eris Compatibility Report
+
+        Verwende dieses Formular, um einen reproduzierbaren Kompatibilitätstest des **PSx Classic Custom SSH MOTD** und des zugehörigen Installers unter **Project Eris** zu dokumentieren.
+
+        **Alle nachfolgenden Angaben sind verpflichtend.** Falls eine Information nicht bekannt ist, trage ausdrücklich `Nicht bekannt` ein. Falls ein Punkt nicht zutrifft, trage `Nicht zutreffend` ein.
+
+  - type: dropdown
+    id: compatibility_status
+    attributes:
+      label: Kompatibilitätsstatus
+      description: Wähle das Gesamtergebnis des Tests.
+      options:
+        - Vollständig kompatibel
+        - Kompatibel mit kleineren Einschränkungen
+        - Eingeschränkt kompatibel
+        - Nicht kompatibel
+        - Test nicht vollständig abgeschlossen
+    validations:
+      required: true
+
+  - type: input
+    id: project_eris_version
+    attributes:
+      label: Project-Eris-Version / Build
+      description: Gib die exakt getestete Project-Eris-Version oder den Build an.
+      placeholder: z. B. Versionsnummer, Build-Datum oder Commit
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware_setup
+    attributes:
+      label: Verwendete Hardware
+      description: Dokumentiere die relevante Hardware des Tests.
+      placeholder: |
+        PlayStation Classic Revision = ...
+        USB-Speicher = ...
+        USB-Hub = ...
+        OTG-Adapter = ...
+        Stromversorgung = ...
+        Weitere Hardware = ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ssh_status
+    attributes:
+      label: SSH-Zugriff
+      description: Gib an, ob ein SSH-Zugriff in der getesteten Project-Eris-Umgebung möglich war.
+      options:
+        - Verfügbar und funktionsfähig
+        - Verfügbar mit Einschränkungen
+        - Nicht verfügbar
+        - Nicht bekannt
+    validations:
+      required: true
+
+  - type: dropdown
+    id: root_status
+    attributes:
+      label: Root-Zugriff
+      description: Gib an, ob Root-Zugriff in der getesteten Umgebung verfügbar war.
+      options:
+        - Verfügbar und funktionsfähig
+        - Verfügbar mit Einschränkungen
+        - Nicht verfügbar
+        - Nicht bekannt
+    validations:
+      required: true
+
+  - type: textarea
+    id: shell_profile
+    attributes:
+      label: Shell- und Profilstruktur
+      description: Dokumentiere die tatsächlich vorhandene Shell- und Login-Profilstruktur.
+      placeholder: |
+        /etc/profile = ...
+        /etc/profile.d/ = ...
+        MOTD-Lademechanismus = ...
+        Weitere relevante Pfade = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: mount_structure
+    attributes:
+      label: Mount- und Dateisystemstruktur
+      description: Dokumentiere relevante Root-, Overlay-, Media- und USB-Mounts.
+      placeholder: |
+        Root-Dateisystem = ...
+        Read-only / Read-write = ...
+        Overlay-Struktur = ...
+        /media = ...
+        Weitere Mounts = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: system_paths
+    attributes:
+      label: Verfügbarkeit benötigter Systempfade
+      description: Prüfe die vom MOTD verwendeten Systempfade und dokumentiere Abweichungen.
+      placeholder: |
+        /proc/cpuinfo = ...
+        /proc/mtktz/mtktscpu = ...
+        /proc/mtktz/mtktspmic = ...
+        /data = ...
+        /media = ...
+        Weitere Abweichungen = ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scp_status
+    attributes:
+      label: SCP-Dateiübertragung
+      description: Gib an, ob die Übertragung der MOTD-Datei per SCP funktioniert hat.
+      options:
+        - Funktioniert
+        - Funktioniert mit Einschränkungen
+        - Funktioniert nicht
+        - Nicht getestet
+    validations:
+      required: true
+
+  - type: dropdown
+    id: shell_syntax
+    attributes:
+      label: Shell-Syntaxprüfung
+      description: Ergebnis von `sh -n` für die verwendete `motd-bs.sh`.
+      options:
+        - Erfolgreich
+        - Fehlgeschlagen
+        - Nicht durchgeführt
+    validations:
+      required: true
+
+  - type: textarea
+    id: installation_result
+    attributes:
+      label: Installations- und Neustartergebnis
+      description: Dokumentiere Installation, Backup, Neustart und die erste neue SSH-Sitzung.
+      placeholder: |
+        Backup = ...
+        Installation = ...
+        Neustart = ...
+        SSH nach Neustart = ...
+        MOTD geladen = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: motd_result
+    attributes:
+      label: MOTD-Darstellung und Systeminformationen
+      description: Beschreibe, welche Bereiche korrekt dargestellt beziehungsweise ausgelesen wurden.
+      placeholder: |
+        Benutzer / Hostname = ...
+        Kernel = ...
+        CPU / RAM = ...
+        Temperaturen = ...
+        Storage = ...
+        Verbindungsstatus = ...
+        Darstellungsfehler = ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: differences_bleemsync
+    attributes:
+      label: Unterschiede zu BleemSync
+      description: Dokumentiere alle festgestellten Abweichungen gegenüber der bisher getesteten BleemSync-Umgebung.
+      placeholder: Pfade, Mounts, Shell-Mechanismen, Rechte, Startverhalten oder Keine festgestellt
+    validations:
+      required: true
+
+  - type: textarea
+    id: known_issues
+    attributes:
+      label: Bekannte Probleme oder Einschränkungen
+      description: Dokumentiere sämtliche festgestellten Probleme. Falls keine vorhanden sind, trage `Keine bekannt` ein.
+      placeholder: Keine bekannt oder genaue Beschreibung
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Nachweise / zusätzliche Testinformationen
+      description: Ergänze Logs, Screenshots, Konsolenausgaben oder weitere nachvollziehbare Testdaten.
+      placeholder: Logs, Screenshots, Befehlsausgaben oder Keine vorhanden
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: Bestätigung
+      description: Bestätige die Qualität und Reproduzierbarkeit des Tests.
+      options:
+        - label: Ich habe den beschriebenen Project-Eris-Test selbst auf der angegebenen PlayStation Classic durchgeführt.
+          required: true
+        - label: Die angegebenen Versionen, Pfade, Systemzustände und Testergebnisse entsprechen dem tatsächlich durchgeführten Test.
+          required: true
+        - label: Bekannte Probleme, Einschränkungen und Abweichungen zu BleemSync wurden vollständig dokumentiert.
+          required: true
+        - label: Alle Pflichtfelder wurden vollständig ausgefüllt und nicht entfernt.
+          required: true
