@@ -1,0 +1,148 @@
+name: MOTD Webroot File Monitor
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: motd-webroot-file-monitor
+  cancel-in-progress: true
+
+jobs:
+  monitor:
+    name: Check MOTD Webroot Files
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Check MOTD installer files
+        shell: bash
+        run: |
+          set +e
+
+          HEADER="X-BYLICKILABS-Installer: motd-installer"
+          FAILED=0
+
+          PS_STATUS="OFFLINE"
+          SH_STATUS="OFFLINE"
+          PS_HTTP="-"
+          SH_HTTP="-"
+          PS_SIZE="-"
+          SH_SIZE="-"
+
+          check_file() {
+            URL="$1"
+            NAME="$2"
+            OUTPUT="/tmp/$NAME"
+
+            echo "========================================"
+            echo "Checking: $NAME"
+            echo "URL:      $URL"
+            echo "========================================"
+
+            HTTP_CODE=$(curl \
+              --silent \
+              --show-error \
+              --location \
+              --connect-timeout 10 \
+              --max-time 25 \
+              --retry 2 \
+              --retry-delay 2 \
+              --header "$HEADER" \
+              --output "$OUTPUT" \
+              --write-out "%{http_code}" \
+              "$URL")
+
+            CURL_EXIT=$?
+
+            if [ "$CURL_EXIT" -ne 0 ]; then
+              echo "::error::$NAME could not be downloaded (curl exit $CURL_EXIT)."
+              FAILED=1
+              RESULT_STATUS="OFFLINE"
+              RESULT_HTTP="000"
+              RESULT_SIZE="0"
+              return
+            fi
+
+            RESULT_HTTP="$HTTP_CODE"
+
+            if [ "$HTTP_CODE" != "200" ]; then
+              echo "::error::$NAME returned HTTP $HTTP_CODE."
+              FAILED=1
+              RESULT_STATUS="OFFLINE"
+              RESULT_SIZE="0"
+              return
+            fi
+
+            if [ ! -s "$OUTPUT" ]; then
+              echo "::error::$NAME returned an empty file."
+              FAILED=1
+              RESULT_STATUS="OFFLINE"
+              RESULT_SIZE="0"
+              return
+            fi
+
+            SIZE=$(stat -c%s "$OUTPUT")
+            RESULT_SIZE="$SIZE"
+
+            if grep -Eiq '^[[:space:]]*<(html|!doctype html)' "$OUTPUT"; then
+              echo "::error::$NAME returned HTML instead of the expected script file."
+              FAILED=1
+              RESULT_STATUS="INVALID"
+              return
+            fi
+
+            RESULT_STATUS="ONLINE"
+
+            echo "$NAME is ONLINE."
+            echo "HTTP status: $HTTP_CODE"
+            echo "File size:   $SIZE bytes"
+            echo ""
+          }
+
+          check_file \
+            "https://www.bylickilabs.de/motd_v0.2.ps1" \
+            "motd_v0.2.ps1"
+
+          PS_STATUS="$RESULT_STATUS"
+          PS_HTTP="$RESULT_HTTP"
+          PS_SIZE="$RESULT_SIZE"
+
+          check_file \
+            "https://www.bylickilabs.de/motd-bs.sh" \
+            "motd-bs.sh"
+
+          SH_STATUS="$RESULT_STATUS"
+          SH_HTTP="$RESULT_HTTP"
+          SH_SIZE="$RESULT_SIZE"
+
+          {
+            echo "## BYLICKILABS MOTD Webroot Monitor"
+            echo ""
+            echo "| Datei | Status | HTTP | Größe |"
+            echo "|---|---|---:|---:|"
+            echo "| \`motd_v0.2.ps1\` | **$PS_STATUS** | $PS_HTTP | $PS_SIZE Bytes |"
+            echo "| \`motd-bs.sh\` | **$SH_STATUS** | $SH_HTTP | $SH_SIZE Bytes |"
+            echo ""
+            echo "Geprüft über den produktiven Installer-Header:"
+            echo ""
+            echo "\`X-BYLICKILABS-Installer: motd-installer\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          echo "========================================"
+          echo " BYLICKILABS MOTD WEBROOT FILE MONITOR"
+          echo "========================================"
+          echo " motd_v0.2.ps1 : $PS_STATUS"
+          echo " motd-bs.sh     : $SH_STATUS"
+          echo "========================================"
+
+          if [ "$FAILED" -ne 0 ]; then
+            echo "::error::One or more required MOTD files are unavailable or invalid."
+            exit 1
+          fi
+
+          echo "All required MOTD files are ONLINE."
