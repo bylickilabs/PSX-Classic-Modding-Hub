@@ -2,7 +2,7 @@ name: PSx Struktur Monitor
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 * * * *'
       timezone: 'Europe/Berlin'
   workflow_dispatch:
 
