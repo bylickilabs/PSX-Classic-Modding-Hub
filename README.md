@@ -52,7 +52,7 @@
 | SSH | OpenSSH | Remote-Systemzugriff | ✅ getestet |
 | Root Access | Linux | Installation in `/etc/profile.d/` | ✅ getestet |
 | `motd-bs.sh` | Shell | Dynamischer SSH-Login-Banner | ✅ funktioniert |
-| PowerShell Installer | Windows 10 / 11 | Automatisiertes Deployment | 🔧 in Entwicklung |
+| PowerShell Installer | Windows 10 / 11 | Automatisiertes Deployment | ✅ AKTIV |
 | SCP | OpenSSH | Übertragung der MOTD | ✅ unterstützt |
 | Systeminformationen | `/proc` / Linux | CPU, RAM, Temperatur, Storage | ✅ dynamisch |
 | Backup | BleemSync Storage | Sicherung der Original-MOTD | ✅ integriert |
