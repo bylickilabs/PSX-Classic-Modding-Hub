@@ -25,6 +25,7 @@ jobs:
           set +e
 
           HEADER="X-BYLICKILABS-Installer: motd-installer"
+          USER_AGENT="BYLICKILABS-MOTD-Monitor/1.0"
           FAILED=0
 
           PS_STATUS="OFFLINE"
@@ -52,6 +53,7 @@ jobs:
               --max-time 25 \
               --retry 2 \
               --retry-delay 2 \
+              --user-agent "$USER_AGENT" \
               --header "$HEADER" \
               --output "$OUTPUT" \
               --write-out "%{http_code}" \
@@ -128,9 +130,13 @@ jobs:
             echo "| \`motd_v0.2.ps1\` | **$PS_STATUS** | $PS_HTTP | $PS_SIZE Bytes |"
             echo "| \`motd-bs.sh\` | **$SH_STATUS** | $SH_HTTP | $SH_SIZE Bytes |"
             echo ""
-            echo "Geprüft über den produktiven Installer-Header:"
+            echo "Geprüft mit:"
             echo ""
             echo "\`X-BYLICKILABS-Installer: motd-installer\`"
+            echo ""
+            echo "User-Agent:"
+            echo ""
+            echo "\`BYLICKILABS-MOTD-Monitor/1.0\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
           echo "========================================"
