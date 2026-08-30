@@ -1,5 +1,9 @@
 # SystemC.ps1
 
+| <img width="1492" height="772" alt="screenshot systemc" src="https://github.com/user-attachments/assets/9cb550b9-f3b9-4880-a31b-6ef5e23880db" /> |
+|---|
+
+
 <p align="center">
   <strong>PSX Classic Maintenance & Diagnostic Toolkit</strong>
 </p>
