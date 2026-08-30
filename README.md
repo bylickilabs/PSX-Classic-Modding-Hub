@@ -44,6 +44,57 @@
 
 <!-- PSX-STRUCTURE-MONITOR:START -->
 
+### PSx STRUKTUR MONITOR
+
+[![PSx Struktur Monitor](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/monitor.yml/badge.svg)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/monitor.yml)
+
+| Umgebung | Strukturstatus | MOTD Installer | Upstream-Branch |
+|---|---|---|---|
+| BleemSync | 🟢 STABIL | 🟢 UNTERSTÜTZT | `master` |
+| AutoBleem | 🟢 STABIL | 🔴 NICHT UNTERSTÜTZT | `develop` |
+| Project Eris | 🟢 STABIL | 🔴 NICHT UNTERSTÜTZT | `master` |
+
+```text
+bleemsync/
+├─ etc/
+│  ├─ bleemsync/
+│  └─ boot_menu/
+└─ opt/
+   └─ retroarch/
+```
+
+```text
+payload/
+├─ Autobleem/
+│  ├─ bin/
+│  │  ├─ autobleem/
+│  │  └─ emu/
+│  └─ rc/
+├─ Games/
+└─ themes/
+```
+
+```text
+Payload.PlayStationClassic/
+└─ project_eris/
+   ├─ etc/
+   │  ├─ boot_menu/
+   │  └─ project_eris/
+   └─ opt/
+      ├─ emulationstation/
+      └─ retroarch/
+```
+
+| Status | Bedeutung |
+|---|---|
+| 🟢 `STABIL` | Alle erwarteten Strukturmerkmale wurden erkannt. |
+| 🔴 `GEÄNDERT` | Mindestens ein erwartetes Strukturmerkmal fehlt. |
+| 🔴 `PRÜFUNG FEHLGESCHLAGEN` | Das Upstream-Repository konnte nicht überprüft werden. |
+
+**BleemSync** ist die aktuell unterstützte Umgebung des MOTD Installers.
+
+**AutoBleem** und **Project Eris** bleiben für den MOTD Installer `NICHT UNTERSTÜTZT`, bis sie ausdrücklich getestet und freigegeben wurden.
+
 <!-- PSX-STRUCTURE-MONITOR:END -->
 
 ---
