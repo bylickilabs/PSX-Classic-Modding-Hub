@@ -42,7 +42,9 @@
 
 ---
 
-<!-- PSX-STRUCTURE-MONITOR-POSITION -->
+<!-- PSX-STRUCTURE-MONITOR:START -->
+
+<!-- PSX-STRUCTURE-MONITOR:END -->
 
 ---
 
@@ -169,56 +171,3 @@ input_joypad_driver = "udev"
 ## LICENSE
 
 [LICENSE](LICENSE)
-
-<!-- PSX-STRUCTURE-MONITOR:START -->
-
-[![PSx Struktur Monitor](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/psx-structure-monitor.yml/badge.svg)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/psx-structure-monitor.yml)
-
-| Umgebung | Strukturstatus | MOTD Installer | Upstream-Branch |
-| --- | --- | --- | --- |
-| BleemSync | 🟢 REFERENZ | 🟢 UNTERSTÜTZT | Referenzstruktur |
-| AutoBleem | 🟢 STABIL | 🔴 NICHT UNTERSTÜTZT | `develop` |
-| Project Eris | 🟢 STABIL | 🔴 NICHT UNTERSTÜTZT | `master` |
-
-```text
-SONY/
-└─ bleemsync/
-   ├─ etc/
-   │  ├─ bleemsync/
-   │  └─ boot_menu/
-   └─ opt/
-      ├─ bleemsync_ui/
-      └─ retroarch/
-```
-
-```text
-SONY/
-├─ Autobleem/
-│  ├─ bin/
-│  │  └─ db/
-│  └─ rc/
-├─ Games/
-├─ System/
-│  └─ Databases/
-└─ Themes/
-```
-
-```text
-SONY/
-└─ project_eris/
-   ├─ etc/
-   │  ├─ boot_menu/
-   │  └─ project_eris/
-   └─ opt/
-      ├─ emulationstation/
-      └─ retroarch/
-```
-
-🟢 `STABIL` bedeutet, dass das überwachte Upstream-Repository weiterhin alle erwarteten Strukturmerkmale enthält.
-
-🔴 `GEÄNDERT` bedeutet, dass mindestens ein erwartetes Strukturmerkmal nicht mehr vorhanden ist.
-
-🔴 `PRÜFUNG FEHLGESCHLAGEN` bedeutet, dass das Upstream-Repository nicht überprüft werden konnte.
-
-AutoBleem und Project Eris bleiben für den MOTD Installer `NICHT UNTERSTÜTZT`, bis sie ausdrücklich getestet und freigegeben wurden.
-<!-- PSX-STRUCTURE-MONITOR:END -->
