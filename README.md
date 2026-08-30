@@ -34,9 +34,11 @@
 ---
 
 > [!NOTE]
-> **DEM­NÄCHST // MOTD INSTALLER**
+> **MOTD INSTALLER**
 >
 > PSx Classic // SSH Terminal // BleemSync // BYLICKILABS
+>
+> [MOTD INSTALLER // DOKUMENTATION & INSTALLATION](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/blob/main/Tools/MOTD-Installer/README.md)
 
 | <img width="3151" height="1267" alt="789216637_1457225999803697_6728038102925628821_n" src="https://github.com/user-attachments/assets/4a7a58b9-7ec7-4ecc-80a2-5c4622e5dd38" /> | <img width="3152" height="1269" alt="786375696_1457230399803257_2310485534073744596_n" src="https://github.com/user-attachments/assets/61cd326e-4426-46cf-b7b5-24e4eca22330" /> |
 |--|---|
