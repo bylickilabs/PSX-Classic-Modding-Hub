@@ -20,10 +20,17 @@ jobs:
 
     steps:
       - name: Repository auschecken
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Aktuellen Main-Branch synchronisieren
+        shell: bash
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
 
       - name: Upstream-Strukturen prüfen und README aktualisieren
-        id: monitor
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
@@ -33,8 +40,6 @@ jobs:
           import json
           import os
           import re
-          import sys
-          import urllib.error
           import urllib.request
           from pathlib import Path
 
@@ -42,16 +47,28 @@ jobs:
           repository = os.environ["REPOSITORY"]
 
           projects = {
+              "BleemSync": {
+                  "repo": "pathartl/BleemSync.Payload.PlayStationClassic",
+                  "required": [
+                      "bleemsync",
+                      "bleemsync/etc",
+                      "bleemsync/etc/bleemsync",
+                      "bleemsync/etc/boot_menu",
+                      "bleemsync/opt",
+                      "bleemsync/opt/retroarch",
+                  ],
+              },
               "AutoBleem": {
                   "repo": "autobleem/AutoBleem",
                   "required": [
                       "payload/Autobleem",
                       "payload/Autobleem/bin",
+                      "payload/Autobleem/bin/autobleem",
+                      "payload/Autobleem/bin/emu",
                       "payload/Autobleem/rc",
                       "payload/Games",
                       "payload/themes",
                   ],
-                  "motd": "🔴 NICHT UNTERSTÜTZT",
               },
               "Project Eris": {
                   "repo": "Project-Eris-psc/Project-Eris-Payload",
@@ -64,7 +81,6 @@ jobs:
                       "Payload.PlayStationClassic/project_eris/opt/emulationstation",
                       "Payload.PlayStationClassic/project_eris/opt/retroarch",
                   ],
-                  "motd": "🔴 NICHT UNTERSTÜTZT",
               },
           }
 
@@ -78,20 +94,32 @@ jobs:
                       "User-Agent": "BYLICKILABS-PSx-Structure-Monitor",
                   },
               )
-              with urllib.request.urlopen(request, timeout=30) as response:
+
+              with urllib.request.urlopen(
+                  request,
+                  timeout=30,
+              ) as response:
                   return json.load(response)
 
           def inspect_project(project):
               repo = project["repo"]
+
               try:
-                  meta = github_json(f"https://api.github.com/repos/{repo}")
+                  meta = github_json(
+                      f"https://api.github.com/repos/{repo}"
+                  )
+
                   branch = meta["default_branch"]
+
                   tree_data = github_json(
-                      f"https://api.github.com/repos/{repo}/git/trees/{branch}?recursive=1"
+                      f"https://api.github.com/repos/{repo}/git/trees/"
+                      f"{branch}?recursive=1"
                   )
 
                   if tree_data.get("truncated"):
-                      raise RuntimeError("GitHub-Baumstruktur wurde abgeschnitten")
+                      raise RuntimeError(
+                          "GitHub-Baumstruktur wurde abgeschnitten"
+                      )
 
                   directories = {
                       item["path"]
@@ -100,7 +128,8 @@ jobs:
                   }
 
                   missing = [
-                      path for path in project["required"]
+                      path
+                      for path in project["required"]
                       if path not in directories
                   ]
 
@@ -110,6 +139,7 @@ jobs:
                       "missing": missing,
                       "error": "",
                   }
+
               except Exception as exc:
                   return {
                       "ok": False,
@@ -118,66 +148,76 @@ jobs:
                       "error": str(exc),
                   }
 
+          def status_text(result):
+              if result["ok"]:
+                  return "🟢 STABIL"
+
+              if result["error"]:
+                  return "🔴 PRÜFUNG FEHLGESCHLAGEN"
+
+              return "🔴 GEÄNDERT"
+
           results = {
               name: inspect_project(project)
               for name, project in projects.items()
           }
 
-          overall_ok = all(result["ok"] for result in results.values())
-
-          def status_text(result):
-              if result["ok"]:
-                  return "🟢 STABIL"
-              if result["error"]:
-                  return "🔴 PRÜFUNG FEHLGESCHLAGEN"
-              return "🔴 GEÄNDERT"
-
+          bleemsync = results["BleemSync"]
           autobleem = results["AutoBleem"]
           eris = results["Project Eris"]
+
+          overall_ok = all(
+              result["ok"]
+              for result in results.values()
+          )
+
+          if bleemsync["ok"]:
+              bleemsync_motd = "🟢 UNTERSTÜTZT"
+          else:
+              bleemsync_motd = "🔴 PRÜFUNG ERFORDERLICH"
 
           badge = (
               f"[![PSx Struktur Monitor]"
               f"(https://github.com/{repository}/actions/workflows/"
-              f"psx-structure-monitor.yml/badge.svg)]"
+              f"monitor.yml/badge.svg)]"
               f"(https://github.com/{repository}/actions/workflows/"
-              f"psx-structure-monitor.yml)"
+              f"monitor.yml)"
           )
 
           block = f"""<!-- PSX-STRUCTURE-MONITOR:START -->
 
+          ### PSx STRUKTUR MONITOR
+
           {badge}
 
           | Umgebung | Strukturstatus | MOTD Installer | Upstream-Branch |
-          | --- | --- | --- | --- |
-          | BleemSync | 🟢 REFERENZ | 🟢 UNTERSTÜTZT | Referenzstruktur |
+          |---|---|---|---|
+          | BleemSync | {status_text(bleemsync)} | {bleemsync_motd} | `{bleemsync["branch"]}` |
           | AutoBleem | {status_text(autobleem)} | 🔴 NICHT UNTERSTÜTZT | `{autobleem["branch"]}` |
           | Project Eris | {status_text(eris)} | 🔴 NICHT UNTERSTÜTZT | `{eris["branch"]}` |
 
           ```text
-          SONY/
-          └─ bleemsync/
-             ├─ etc/
-             │  ├─ bleemsync/
-             │  └─ boot_menu/
-             └─ opt/
-                ├─ bleemsync_ui/
-                └─ retroarch/
+          bleemsync/
+          ├─ etc/
+          │  ├─ bleemsync/
+          │  └─ boot_menu/
+          └─ opt/
+             └─ retroarch/
           ```
 
           ```text
-          SONY/
+          payload/
           ├─ Autobleem/
           │  ├─ bin/
-          │  │  └─ db/
+          │  │  ├─ autobleem/
+          │  │  └─ emu/
           │  └─ rc/
           ├─ Games/
-          ├─ System/
-          │  └─ Databases/
-          └─ Themes/
+          └─ themes/
           ```
 
           ```text
-          SONY/
+          Payload.PlayStationClassic/
           └─ project_eris/
              ├─ etc/
              │  ├─ boot_menu/
@@ -187,38 +227,58 @@ jobs:
                 └─ retroarch/
           ```
 
-          🟢 `STABIL` bedeutet, dass das überwachte Upstream-Repository weiterhin alle erwarteten Strukturmerkmale enthält.
+          | Status | Bedeutung |
+          |---|---|
+          | 🟢 `STABIL` | Alle erwarteten Strukturmerkmale wurden erkannt. |
+          | 🔴 `GEÄNDERT` | Mindestens ein erwartetes Strukturmerkmal fehlt. |
+          | 🔴 `PRÜFUNG FEHLGESCHLAGEN` | Das Upstream-Repository konnte nicht überprüft werden. |
 
-          🔴 `GEÄNDERT` bedeutet, dass mindestens ein erwartetes Strukturmerkmal nicht mehr vorhanden ist.
+          **BleemSync** ist die aktuell unterstützte Umgebung des MOTD Installers.
 
-          🔴 `PRÜFUNG FEHLGESCHLAGEN` bedeutet, dass das Upstream-Repository nicht überprüft werden konnte.
+          **AutoBleem** und **Project Eris** bleiben für den MOTD Installer `NICHT UNTERSTÜTZT`, bis sie ausdrücklich getestet und freigegeben wurden.
 
-          AutoBleem und Project Eris bleiben für den MOTD Installer `NICHT UNTERSTÜTZT`, bis sie ausdrücklich getestet und freigegeben wurden.
           <!-- PSX-STRUCTURE-MONITOR:END -->"""
 
           block = "\n".join(
-              line[10:] if line.startswith("          ") else line
+              line[10:]
+              if line.startswith("          ")
+              else line
               for line in block.splitlines()
           )
 
           readme = Path("README.md")
-          if not readme.exists():
-              raise RuntimeError("README.md wurde nicht gefunden")
 
-          text = readme.read_text(encoding="utf-8")
+          if not readme.exists():
+              raise RuntimeError(
+                  "README.md wurde nicht gefunden"
+              )
+
+          text = readme.read_text(
+              encoding="utf-8"
+          )
+
           pattern = re.compile(
               r"<!-- PSX-STRUCTURE-MONITOR:START -->.*?"
               r"<!-- PSX-STRUCTURE-MONITOR:END -->",
               re.DOTALL,
           )
 
-          if pattern.search(text):
-              updated = pattern.sub(block, text)
-          else:
-              separator = "\n" if text.endswith("\n") else "\n\n"
-              updated = text + separator + block + "\n"
+          if not pattern.search(text):
+              raise RuntimeError(
+                  "Der PSx-Struktur-Monitor-Bereich wurde "
+                  "in README.md nicht gefunden"
+              )
 
-          readme.write_text(updated, encoding="utf-8")
+          updated = pattern.sub(
+              lambda match: block,
+              text,
+              count=1,
+          )
+
+          readme.write_text(
+              updated,
+              encoding="utf-8",
+          )
 
           details = []
 
@@ -227,27 +287,53 @@ jobs:
                   continue
 
               if result["error"]:
-                  details.append(f"{name}: {result['error']}")
+                  details.append(
+                      f"{name}: {result['error']}"
+                  )
               else:
-                  missing = ", ".join(result["missing"])
-                  details.append(f"{name}: Fehlende Strukturmerkmale: {missing}")
+                  missing = ", ".join(
+                      result["missing"]
+                  )
 
-          Path(".psx-structure-monitor-result").write_text(
-              "ok\n" if overall_ok else "failed\n",
+                  details.append(
+                      f"{name}: Fehlende Strukturmerkmale: "
+                      f"{missing}"
+                  )
+
+          Path(
+              ".psx-structure-monitor-result"
+          ).write_text(
+              "ok\n"
+              if overall_ok
+              else "failed\n",
               encoding="utf-8",
           )
 
-          Path(".psx-structure-monitor-details").write_text(
-              "\n".join(details) + ("\n" if details else ""),
+          Path(
+              ".psx-structure-monitor-details"
+          ).write_text(
+              "\n".join(details)
+              + ("\n" if details else ""),
               encoding="utf-8",
           )
 
-          print("AutoBleem:", status_text(autobleem))
-          print("Project Eris:", status_text(eris))
+          print(
+              "BleemSync:",
+              status_text(bleemsync),
+          )
 
-          if details:
-              for detail in details:
-                  print(detail)
+          print(
+              "AutoBleem:",
+              status_text(autobleem),
+          )
+
+          print(
+              "Project Eris:",
+              status_text(eris),
+          )
+
+          for detail in details:
+              print(detail)
           PY
 
       - name: README-Status committen
@@ -257,11 +343,34 @@ jobs:
             echo "Der README-Status ist unverändert."
             exit 0
           fi
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add README.md
           git commit -m "chore: PSx Strukturstatus aktualisieren"
-          git push
+
+          for versuch in 1 2 3; do
+            echo "Push-Versuch ${versuch} von 3"
+
+            git fetch origin main
+
+            if ! git rebase origin/main; then
+              git rebase --abort
+              echo "README konnte nicht automatisch mit main zusammengeführt werden."
+              exit 1
+            fi
+
+            if git push origin HEAD:main; then
+              echo "README-Status erfolgreich aktualisiert."
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          echo "README-Status konnte nach drei Versuchen nicht übertragen werden."
+          exit 1
 
       - name: Monitor-Ergebnis überprüfen
         if: always()
@@ -271,7 +380,10 @@ jobs:
             echo "Die Ergebnisdatei des Struktur-Monitors fehlt."
             exit 1
           fi
+
           if [ "$(cat .psx-structure-monitor-result)" != "ok" ]; then
             cat .psx-structure-monitor-details
             exit 1
           fi
+
+          echo "Alle überwachten Strukturen sind stabil."
