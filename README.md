@@ -4,6 +4,10 @@
 
 <br><br>
 
+[![MOTD Webroot File Monitor](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/motd.yml/badge.svg)](https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/motd.yml)
+
+<br>
+
 <a href="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/config-validator.yml"><img src="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/config-validator.yml/badge.svg" alt="PSX Classic Config Validator"></a>
 <a href="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/issue-guardian.yml"><img src="https://github.com/bylickilabs/PSX-Classic-Modding-Hub/actions/workflows/issue-guardian.yml/badge.svg" alt="PSX Classic Issue Guardian"></a>
 
