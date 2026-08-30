@@ -15,7 +15,7 @@
 
 </div>
 
-| <img width="1280" height="720" alt="Github banner" src="https://github.com/user-attachments/assets/67a32ba6-2041-4c6c-a97d-0f0d63d25d62" /> |
+| <img width="1280" height="400" alt="Github banner" src="https://github.com/user-attachments/assets/edb1a52b-1a16-4863-a8f3-11a3f4b4466a" /> |
 |---|
 
 
