@@ -1,7 +1,7 @@
+<div align="center">
+
 | Private Website available in German & English | [LINK](https://bylickilabs.de) |
 |---|---|
-
-<div align="center">
  
 <img src="https://img.shields.io/badge/PSX_CLASSIC-MODDING_HUB-003791?style=for-the-badge&logo=playstation&logoColor=white" alt="PSX Classic Modding Hub">
 
